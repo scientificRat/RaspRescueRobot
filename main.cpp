@@ -1,6 +1,6 @@
 //
 //  main.cpp
-//  UDPClientA
+//  rescueRobot
 //
 //  Created by 黄正跃 on 9/15/16.
 //  Copyright © 2016 黄正跃. All rights reserved.

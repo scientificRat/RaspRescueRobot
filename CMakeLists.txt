@@ -1,5 +1,5 @@
 cmake_minimum_required (VERSION 2.8)
-project (raspivision)
+project (rescueRobot)
 set(raspicam_DIR /home/pi/raspicam-0.1.3/build)
 find_package(raspicam REQUIRED)
 find_package(OpenCV)
