@@ -22,13 +22,14 @@ void VideoStreamer::stop(){
     this->isStop=true;
 }
 
-void VideoStreamer::sendMessage(std::vector<u_char>& imageData){
+void VideoStreamer::sendVideoFrame(std::vector<u_char>& imageData){
     TCPComponent& tcpComponent = TCPComponent::getInstance();
-    MessageHead messageHead;
-    messageHead.type='v';
-    messageHead.length=static_cast<int>(sizeof(messageHead)+imageData.size());
-    tcpComponent.sendMessage(&messageHead, sizeof(messageHead));
+    char type='v';
+    int length=static_cast<int>(imageData.size());
+    tcpComponent.sendMessage(&type,1);
+    tcpComponent.sendMessage(&length,4);
     tcpComponent.sendMessage(imageData.data(), imageData.size());
+
 }
 
 }

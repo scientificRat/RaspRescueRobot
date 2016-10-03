@@ -21,10 +21,6 @@
 #include <strings.h>
 #include <mutex>
 namespace rr{
-    struct MessageHead{
-        char type;
-        int length;
-    };
 
     class TCPComponent {
     private:
@@ -49,8 +45,10 @@ namespace rr{
         TCPComponent(const TCPComponent&)    = delete;
         TCPComponent& operator=(const TCPComponent&)    = delete;
         
-        //the interface to send Message
-        void sendMessage(const void* data, size_t length);
+        //the interface to send raw Message (不用size_t 自己定义的应用层协议只允许int这么大)
+        void sendMessage(const void* data, int length);
+        //the interface to send string data
+        void sendRequest(const char* JSONBytes, int length);
         
     private:
         
@@ -74,7 +72,7 @@ namespace rr{
             bzero(&serverAddr, sizeof(sockaddr_in));
             serverAddr.sin_family=AF_INET;
             serverAddr.sin_port=htons(8902);
-            serverAddr.sin_addr.s_addr = inet_addr("127.0.0.1");
+            serverAddr.sin_addr.s_addr = inet_addr("123.206.21.185");
             //connect
             if(-1 == connect(sockfd, (sockaddr*)&serverAddr, sizeof(serverAddr))){
                 close(sockfd);
@@ -83,9 +81,11 @@ namespace rr{
             }
             //start the receiveThread
             receiveThread = new std::thread(receive, this);
+            // TODO: 发送登录请求
+            sendRequest(xxxxx);
         }
         
-        
+
         //(this that is that this)
         static void receive(TCPComponent *that);
         

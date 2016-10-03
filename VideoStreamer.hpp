@@ -27,7 +27,7 @@ namespace rr{
         void setConstract();
         
     private:
-        void sendMessage(std::vector<u_char>& imageData);
+        void sendVideoFrame(std::vector<u_char>& imageData);
         
     };
 }
