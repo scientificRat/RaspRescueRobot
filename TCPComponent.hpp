@@ -79,7 +79,7 @@ namespace rr{
                 sockfd = -3;
                 std::cerr<<"socket connect failed\n";
             }
-            //start the receiveThread
+            //start the receiveThreads
             receiveThread = new std::thread(receive, this);
             // TODO: 发送登录请求
             sendRequest(xxxxx);
