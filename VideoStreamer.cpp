@@ -7,13 +7,14 @@
 //
 
 #include "VideoStreamer.hpp"
+
 namespace rr{
 void VideoStreamer::start(){
     this->imageProcessUnit->start();
     this->isStop = false;
     while (!this->isStop) {
-        std::vector<u_char>& image=this->imageProcessUnit->getEncodeImage();
-        sendMessage(image);
+		 std::vector<uchar>& image=this->imageProcessUnit->getEncodeImage();
+		 sendVideoFrame(image);
     }
     this->imageProcessUnit->stop();
 }
@@ -22,7 +23,7 @@ void VideoStreamer::stop(){
     this->isStop=true;
 }
 
-void VideoStreamer::sendVideoFrame(std::vector<u_char>& imageData){
+void VideoStreamer::sendVideoFrame(std::vector<uchar>& imageData){
     TCPComponent& tcpComponent = TCPComponent::getInstance();
     char type='v';
     int length=static_cast<int>(imageData.size());

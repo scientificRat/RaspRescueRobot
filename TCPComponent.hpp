@@ -20,6 +20,9 @@
 #include <unistd.h>
 #include <strings.h>
 #include <mutex>
+
+#include "dist/json/json.h"
+
 namespace rr{
 
     class TCPComponent {
@@ -80,9 +83,23 @@ namespace rr{
                 std::cerr<<"socket connect failed\n";
             }
             //start the receiveThreads
-            receiveThread = new std::thread(receive, this);
-            // TODO: 发送登录请求
-            sendRequest(xxxxx);
+             receiveThread = new std::thread(receive, this);
+        	
+			 //create json data
+			 Json::Value root;
+			 Json::FastWriter writer;
+			 Json::Value request;
+ 
+			 request["RequestType"] = "login";
+			 request["LoginName"] = "caesar";
+			 request["Password"] = "123456";
+             root.append(request);
+			 
+			 std::string RequestJson = writer.write(root);
+			 // TODO: 发送登录请求
+             sendRequest(RequestJson.c_str(),RequestJson.length());
+			
+    
         }
         
 

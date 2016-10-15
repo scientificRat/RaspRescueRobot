@@ -21,79 +21,79 @@ namespace rr{
 	 * Destructor
 	 */
 	 ImageCaptureUnit::~ImageCaptureUnit(){
-		 this->mCamera->release();
-		 delete this->mCamera;
-		 this->mCamera = nullptr;
+		 mCamera->release();
+		 delete mCamera;
+		 mCamera = nullptr;
 	 }
 	 
 	 /*
 	 * Set image height
 	 */
 	 void ImageCaptureUnit::setImageHeight(int height) {
-		 this->mCamera->set(CV_CAP_PROP_FRAME_HEIGHT, height);
+		 mCamera->set(CV_CAP_PROP_FRAME_HEIGHT, height);
 	 }
 	
 	 /*
 	 * Get image height
 	 */
 	 int ImageCaptureUnit::getImageHeight() {
-		 return this->mCamera->get(CV_CAP_PROP_FRAME_HEIGHT);
+		 return mCamera->get(CV_CAP_PROP_FRAME_HEIGHT);
 	 }
 	 
 	 /*
 	 *Set image width
 	 */
 	 void ImageCaptureUnit::setImageWidth(int width){
-		 this->mCamera->set(CV_CAP_PROP_FRAME_WIDTH, width);
+		 mCamera->set(CV_CAP_PROP_FRAME_WIDTH, width);
 	 }
 	 
 	 /*
 	 * Get image width
 	 */
 	 int ImageCaptureUnit::getImageWidth() {
-		 return this->mCamera->get(CV_CAP_PROP_FRAME_WIDTH);
+		 return mCamera->get(CV_CAP_PROP_FRAME_WIDTH);
 	 }
 	 
 	 /*
 	 *set image brightness
 	 */
 	 void ImageCaptureUnit::setImageBrightness(int birhtness) {
-		 this->mCamera->set(CV_CAP_PROP_BRIGHTNESS, birhtness);
+		 mCamera->set(CV_CAP_PROP_BRIGHTNESS, birhtness);
 	 }
 
 	 /*
 	 * Get image birhtness
 	 */ 
 	int ImageCaptureUnit::getImageBrightness() {
-		 return this->mCamera->get(CV_CAP_PROP_BRIGHTNESS);
+		 return mCamera->get(CV_CAP_PROP_BRIGHTNESS);
 	}
 	
 	 /*
 	 * Set image contrast
 	 */
 	 void ImageCaptureUnit::setImageContrast(int contrast) {
-		 this->mCamera->set(CV_CAP_PROP_CONTRAST, contrast );
+		 mCamera->set(CV_CAP_PROP_CONTRAST, contrast );
 	 }
 	 
 	 /*
 	 * Get image contrast
 	 */ 
 	 int ImageCaptureUnit::getImageContrast() {
-		 return this->mCamera->get(CV_CAP_PROP_CONTRAST);
+		 return mCamera->get(CV_CAP_PROP_CONTRAST);
 	}
 
 	 /*
 	 * Set image saturation
 	 */
 	 void ImageCaptureUnit::setImageSaturation(int saturation){
-		 this->mCamera->set( CV_CAP_PROP_SATURATION, saturation);
+		 mCamera->set( CV_CAP_PROP_SATURATION, saturation);
 	 } 
 	 
 	 /*
 	 * Get image saturation
 	 */ 
 	 int ImageCaptureUnit::getImageSaturation() {
-		 return this->mCamera->get(CV_CAP_PROP_SATURATION);
+		 return mCamera->get(CV_CAP_PROP_SATURATION);
 	 }
 
 
@@ -101,8 +101,9 @@ namespace rr{
 	 * Capture video frame
 	 */
 	 void ImageCaptureUnit::start(){
-		 this->mCamera = new raspicam::RaspiCam_Cv();
-		 init(this->mCamera);
+		 mCamera = new raspicam::RaspiCam_Cv();
+		 init(mCamera);
+		 mCamera->open();
 	 }
 	 
 	 /*
@@ -126,11 +127,12 @@ namespace rr{
 		 //set camera format
 		 camera->set( CV_CAP_PROP_FORMAT, CV_8UC3 );
 		
-		 if (!camera->open()){
+		 if (!camera->isOpened()){
 			 state = false;
 			 std::cerr << "Camera open failed." << std::endl;
+		 }else{
+			 std::cout << "Raspberry robot's camera opened." << std::endl; 	 
 		 }
-		 std::cout << "Raspberry robot's camera opened." << std::endl; 	 
 		 
 		 return state;
 	 }
@@ -139,10 +141,10 @@ namespace rr{
 	 * Close video frame
 	 */
 	 void ImageCaptureUnit::stop(){
-		 this->mCamera->release();
+		 mCamera->release();
 		 this->mStop = true;
-		 delete this->mCamera;
-		 this->mCamera = nullptr;
+		 delete mCamera;
+		 mCamera = nullptr;
 		 std::cout << "Raspberry robot's camera closed." << std::endl; 	 
 	 }
 	 
@@ -157,9 +159,9 @@ namespace rr{
 	 * Get a frame one by one
 	 */
 	 cv::Mat& ImageCaptureUnit::getImage(){
-		 this->mCamera->grab();
+		 mCamera->grab();
 		 this->mImage.create ( this->getImageHeight(),this->getImageWidth(),CV_8UC3);
-		 this->mCamera->retrieve(this->mImage);
+		 mCamera->retrieve(this->mImage);
 		 return this->mImage;
 	 }
 	 

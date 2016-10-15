@@ -23,6 +23,7 @@ SET(SRC_LIST main.cpp
         Services.cpp      
         TCPComponent.cpp
         VideoStreamer.cpp
+		dist/jsoncpp.cpp
         )
 
 ADD_EXECUTABLE(raspivision ${SRC_LIST})

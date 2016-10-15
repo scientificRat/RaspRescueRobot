@@ -8,17 +8,19 @@
 
 #include "TCPComponent.hpp"
 #include "Services.hpp"
+
+
 namespace rr{
     
 void TCPComponent::receive(TCPComponent *that) {
     Services& services = Services::getInstance();
     while (that->recieveThreadRun){
-        MessageHead* messageHead = new MessageHead();
+       
         char* headBuffer = new char[5];
         //读取头部信息(type,length) 共5byte
         read(that->sockfd,headBuffer, 5);
         char* dataBuffer = new char[*((int*)(headBuffer+1))];
-        read(that->sockfd,dataBuffer,messageHead->length);
+        read(that->sockfd,dataBuffer,*((int*)(headBuffer+1)));
         // TODO:具体动作(注意：服务器返回的消息type='m' 内容为json, 控制端发送的消息type ='c'表示命令)
         if(headBuffer[0]=='c'){
             // FIXME:这里可能需要更改（根据协议情况调整）
@@ -33,7 +35,6 @@ void TCPComponent::receive(TCPComponent *that) {
         }
         delete[] headBuffer;
         delete[] dataBuffer;
-        delete messageHead;
     }
 }
 
@@ -54,8 +55,9 @@ void TCPComponent::sendRequest(const char* JSONBytes, int length){
     for(int i=5;i<5+length;i++){
         sendBuffer[i] = JSONBytes[i-5];
     }
-    sendMessage(sendBuffer);
+    sendMessage(sendBuffer,sizeof(sendBuffer));
 }
+
 
 
 }

@@ -6,14 +6,15 @@
 
 #include <iostream>
 #include <raspicam/raspicam_cv.h>
-#include <thread>
 #include <opencv2/imgproc/imgproc.hpp>
+#include <thread>
 
 #ifndef RASPBERRY_ROBOT_IMAGE_CAPTURE__
 #define RASPBERRY_ROBOT_IMAGE_CAPTURE__
 
 namespace rr{
 	 class ImageCaptureUnit{
+		 raspicam::RaspiCam_Cv *mCamera = nullptr;
 		 public:
 			 /*
 			 * Constructor
@@ -101,7 +102,6 @@ namespace rr{
 			 cv::Mat& getImage();
 			 
 		 private:
-			 raspicam::RaspiCam_Cv *mCamera;
 			 cv::Mat mImage;			 
 			 bool mStop;
 	};

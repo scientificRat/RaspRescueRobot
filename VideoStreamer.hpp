@@ -11,6 +11,7 @@
 #include <vector>
 #include "TCPComponent.hpp"
 #include "ImageProcessUnit.hpp"
+
 namespace rr{
     class VideoStreamer {
     private:
@@ -27,7 +28,7 @@ namespace rr{
         void setConstract();
         
     private:
-        void sendVideoFrame(std::vector<u_char>& imageData);
+        void sendVideoFrame(std::vector<uchar>& imageData);
         
     };
 }
