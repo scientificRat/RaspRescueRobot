@@ -2,7 +2,7 @@
 //  rescueRobot
 //
 //  Created by Wang Han.SCU on 25/9/16.
-//  Copyright ? 2016 robotcloud. SCU. All rights reserved.
+//  Copyright © 2016 robotcloud. SCU. All rights reserved.
 
 #include <iostream>
 #include <raspicam/raspicam_cv.h>
@@ -14,7 +14,7 @@
 
 namespace rr{
 	 class ImageCaptureUnit{
-		 raspicam::RaspiCam_Cv *mCamera = nullptr;
+		 raspicam::RaspiCam_Cv* mCamera = nullptr;
 		 public:
 			 /*
 			 * Constructor

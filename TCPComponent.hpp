@@ -47,7 +47,7 @@ namespace rr{
         //delete these two dangerous function
         TCPComponent(const TCPComponent&)    = delete;
         TCPComponent& operator=(const TCPComponent&)    = delete;
-        
+		
         //the interface to send raw Message (不用size_t 自己定义的应用层协议只允许int这么大)
         void sendMessage(const void* data, int length);
         //the interface to send string data
@@ -55,57 +55,11 @@ namespace rr{
         
     private:
         
-        TCPComponent() {
-            //create tcp socket
-            if(-1 == (sockfd = socket(AF_INET, SOCK_STREAM, 0))){
-                std::cerr<<"socket initial failed\n";
-            }
-            //set the addr of the local socket
-            bzero(&workingAddr, sizeof(sockaddr_in));
-            workingAddr.sin_family=AF_INET;
-            workingAddr.sin_port=htons(8900);
-            workingAddr.sin_addr.s_addr = htonl (INADDR_ANY);
-            //bind
-            if(-1 == (bind(sockfd, (sockaddr *)&workingAddr, sizeof(workingAddr)))){
-                close(sockfd);
-                sockfd = -2;
-                std::cerr<<"socket bind failed\n";
-            }
-            //set the address of the remote server
-            bzero(&serverAddr, sizeof(sockaddr_in));
-            serverAddr.sin_family=AF_INET;
-            serverAddr.sin_port=htons(8902);
-            serverAddr.sin_addr.s_addr = inet_addr("123.206.21.185");
-            //connect
-            if(-1 == connect(sockfd, (sockaddr*)&serverAddr, sizeof(serverAddr))){
-                close(sockfd);
-                sockfd = -3;
-                std::cerr<<"socket connect failed\n";
-            }
-            //start the receiveThreads
-             receiveThread = new std::thread(receive, this);
-        	
-			 //create json data
-			 Json::Value root;
-			 Json::FastWriter writer;
-			 Json::Value request;
- 
-			 request["RequestType"] = "login";
-			 request["LoginName"] = "caesar";
-			 request["Password"] = "123456";
-             root.append(request);
-			 
-			 std::string RequestJson = writer.write(root);
-			 // TODO: 发送登录请求
-             sendRequest(RequestJson.c_str(),RequestJson.length());
-			
-    
-        }
-        
-
-        //(this that is that this)
+        TCPComponent();  
+		//(this that is that this)
         static void receive(TCPComponent *that);
         
+
     };
 }
 

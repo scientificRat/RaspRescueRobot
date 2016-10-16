@@ -27,6 +27,10 @@ void VideoStreamer::sendVideoFrame(std::vector<uchar>& imageData){
     TCPComponent& tcpComponent = TCPComponent::getInstance();
     char type='v';
     int length=static_cast<int>(imageData.size());
+	
+	//just for debug
+	std::cout << "imageData length: "<<length <<std::endl;
+	
     tcpComponent.sendMessage(&type,1);
     tcpComponent.sendMessage(&length,4);
     tcpComponent.sendMessage(imageData.data(), imageData.size());

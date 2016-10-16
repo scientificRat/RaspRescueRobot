@@ -29,9 +29,12 @@ namespace rr{
         
         void startVedioStreamer();
         
-        void startMovementHardware();
+        void startReceiveCommand();
+		
+		void startMovementHardware();
         
         void move(float,float);
+		
     };
 
 }

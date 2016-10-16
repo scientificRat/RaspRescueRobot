@@ -9,7 +9,13 @@
 #include "Services.hpp"
 namespace rr{
     void Services::startVedioStreamer(){
-        this->videoStreamer->start();
+         this->videoStreamer->start();
     }
+	
+	void Services::startReceiveCommand(){
+		 TCPComponent& tcpComponent =  rr::TCPComponent::getInstance();
+		 
+		 tcpComponent.receive(&tcpComponent);
+	}
 }
 
