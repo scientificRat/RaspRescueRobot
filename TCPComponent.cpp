@@ -40,26 +40,58 @@ TCPComponent::TCPComponent() {
                 sockfd = -3;
                 std::cerr<<"socket connect failed\n";
             }
-			
-            //start the receiveThreads
-             receiveThread = new std::thread(receive, this);
-        	
-			 //create json data
-			 Json::Value root;
-			 Json::FastWriter writer;
-			 root["requestType"] = Json::Value("login");
-			 root["loginName"] = Json::Value("caesar");
-			 root["password"] = Json::Value("123456");
-			 std::string RequestJson = writer.write(root); //含有'\n'
-			 
-			 //just for debug
-			 //std::cout <<"RequestJson :"<<RequestJson<<std::endl;
-			 //std::cout <<"RequestJson.length"<<RequestJson.length()<<std::endl; 
-			 // 发送登录请求
-             sendRequest(RequestJson.c_str(),RequestJson.length()-1);
-			
-    
 	 }
+	 
+void TCPComponent::init(){	
+	 //create json data
+	 Json::Value root;
+	 Json::FastWriter writer;
+	 root["requestType"] = Json::Value("login");
+	 root["loginName"] = Json::Value("caesar");
+	 root["password"] = Json::Value("123456");
+	 std::string RequestJson = writer.write(root); //含有'\n'
+	
+	 //just for debug
+	 std::cout <<"RequestJson :"<<RequestJson<<std::endl;
+	 std::cout <<"RequestJson.length : "<<RequestJson.length()<<std::endl; 
+	 
+	 // 发送登录请求
+	 sendRequest(RequestJson.c_str(),RequestJson.length()-1);
+	 
+	 //check login info
+	 Services& services = Services::getInstance();
+	 char* headBuffer = new char[5];
+     //读取头部信息(type,length) 共5byte
+	 read(this->sockfd,headBuffer, 5);
+	 char* dataBuffer = new char[*((int*)(headBuffer+1))];
+	 read(this->sockfd,dataBuffer,*((int*)(headBuffer+1)));
+	 
+	 //just for debug
+	 std::cout << dataBuffer <<std::endl;
+	 
+	 if(headBuffer[0]=='m'){
+		 std::string action ="";
+		 std::string ResponseJson = std::string(dataBuffer);
+		 Json::Reader reader;  
+		 Json::Value root;  
+		 if (reader.parse(ResponseJson, root)) {  
+			 action = root["action"].asString();  
+			 //just for debug
+			 std::cout << action <<std::endl;
+	
+		 }  
+		 
+		 if (action == "startVideo"){
+			 services.startVedioStreamer();
+			 //start the receiveThreads
+			 this->receiveThread = new std::thread(receive, this);
+			 // synchronize threads:
+			 this->receiveThread->join();  
+		 }
+	 }
+	 
+	 std::cout << "ResponseJson error"<<std::endl;
+}
 	 
 void TCPComponent::receive(TCPComponent *that) {
     Services& services = Services::getInstance();
@@ -71,6 +103,10 @@ void TCPComponent::receive(TCPComponent *that) {
         char* dataBuffer = new char[*((int*)(headBuffer+1))];
         read(that->sockfd,dataBuffer,*((int*)(headBuffer+1)));
         // TODO:具体动作(注意：服务器返回的消息type='m' 内容为json, 控制端发送的消息type ='c'表示命令)
+		
+		//debug
+		std::cout << dataBuffer<<std::endl;
+		
         if(headBuffer[0]=='c'){
             // FIXME:这里可能需要更改（根据协议情况调整）
             float left=*((float*)dataBuffer);
@@ -92,7 +128,7 @@ void TCPComponent::receive(TCPComponent *that) {
 			 }
 			
 			//just for deubg
-			std::cout<< ResponseJson<<std::endl;
+			std::cout<<"ResponseJson: "<<ResponseJson<<std::endl;
         }
         else{
 

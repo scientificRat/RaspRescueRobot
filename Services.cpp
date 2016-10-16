@@ -12,10 +12,10 @@ namespace rr{
          this->videoStreamer->start();
     }
 	
-	void Services::startReceiveCommand(){
+	void Services::startConnection(){
 		 TCPComponent& tcpComponent =  rr::TCPComponent::getInstance();
-		 
-		 tcpComponent.receive(&tcpComponent);
+		 tcpComponent.init();
+		 // tcpComponent.receive(&tcpComponent);
 	}
 }
 

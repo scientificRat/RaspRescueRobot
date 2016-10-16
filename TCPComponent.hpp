@@ -52,6 +52,8 @@ namespace rr{
         void sendMessage(const void* data, int length);
         //the interface to send string data
         void sendRequest(const char* JSONBytes, int length);
+		//init TCPComponent
+		void init();
         
     private:
         

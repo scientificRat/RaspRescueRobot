@@ -2,7 +2,7 @@
 //  rescueRobot
 //
 //  Created by Wang Han.SCU on 25/9/16.
-//  Copyright ? 2016 robotcloud. SCU. All rights reserved.
+//  Copyright © 2016 robotcloud. SCU. All rights reserved.
 
 #include "ImageProcessUnit.hpp"
 
@@ -12,16 +12,16 @@ namespace rr{
 	 * Consturctor
 	 */
 	ImageProcessUnit::ImageProcessUnit(){
-		 mImageCaptureUnit = new ImageCaptureUnit();
+		 mImageCaptureUnit  = new ImageCaptureUnit();
 	}
 	
 	 /*
 	 * Deconstructor
-	 */
+	     */
 	 ImageProcessUnit::~ImageProcessUnit(){
 		 mImageCaptureUnit->stop();
 		 delete mImageCaptureUnit;
-		 mImageCaptureUnit = nullptr;
+		 mImageCaptureUnit  = nullptr;
 	 }
 	
 	 /*
@@ -49,7 +49,7 @@ namespace rr{
 	 * Get encode image 
 	 */
 	 std::vector<uchar>& ImageProcessUnit::getEncodeImage(){
-		 cv::Mat& raw_image=this->mImageCaptureUnit->getImage();
+		 cv::Mat& raw_image =this->mImageCaptureUnit->getImage();
 		 this->processImage(raw_image);
 		 cv::imencode(".jpg", raw_image, this->mEncodeImage, std::vector<int>());
 		 return this->mEncodeImage;

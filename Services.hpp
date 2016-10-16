@@ -29,7 +29,7 @@ namespace rr{
         
         void startVedioStreamer();
         
-        void startReceiveCommand();
+        void startConnection();
 		
 		void startMovementHardware();
         
