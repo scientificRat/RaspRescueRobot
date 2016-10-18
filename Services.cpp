@@ -7,15 +7,16 @@
 //
 
 #include "Services.hpp"
-namespace rr{
-    void Services::startVedioStreamer(){
-         this->videoStreamer->start();
+
+namespace rr {
+    void Services::startVedioStreamer() {
+        this->videoStreamer->start();
     }
-	
-	void Services::startConnection(){
-		 TCPComponent& tcpComponent =  rr::TCPComponent::getInstance();
-		 tcpComponent.init();
-		 // tcpComponent.receive(&tcpComponent);
-	}
+
+    void Services::startConnection() {
+        TCPComponent &tcpComponent = rr::TCPComponent::getInstance();
+        tcpComponent.init();
+        // tcpComponent.receive(&tcpComponent);
+    }
 }
 

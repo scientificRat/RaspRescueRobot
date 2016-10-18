@@ -8,11 +8,12 @@
 
 #include <iostream>
 #include "Services.hpp"
-int main(int argc, const char * argv[]) {
-    rr::Services& services = rr::Services::getInstance();
+
+int main(int argc, const char *argv[]) {
+    rr::Services &services = rr::Services::getInstance();
     //services.startVedioStreamer();
-	
-	services.startConnection();
-	
+
+    services.startConnection();
+
     return 0;
 }

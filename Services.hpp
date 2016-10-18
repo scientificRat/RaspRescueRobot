@@ -10,31 +10,33 @@
 #define Services_hpp
 
 #include "VideoStreamer.hpp"
-namespace rr{
+
+namespace rr {
     class Services {
     private:
-        VideoStreamer *videoStreamer =nullptr;
+        VideoStreamer *videoStreamer = nullptr;
     public:
-        static Services& getInstance(){
+        static Services &getInstance() {
             static Services services;
             return services;
         }
-        
-        Services(){
+
+        Services() {
             videoStreamer = new VideoStreamer();
         }
-        
-        Services(const Services&)   = delete;
-        Services& operator=(const Services&)  = delete;
-        
+
+        Services(const Services &) = delete;
+
+        Services &operator=(const Services &) = delete;
+
         void startVedioStreamer();
-        
+
         void startConnection();
-		
-		void startMovementHardware();
-        
-        void move(float,float);
-		
+
+        void startMovementHardware();
+
+        void move(float, float);
+
     };
 
 }

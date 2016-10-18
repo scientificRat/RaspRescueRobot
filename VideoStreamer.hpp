@@ -8,28 +8,31 @@
 
 #ifndef VideoStreamer_hpp
 #define VideoStreamer_hpp
+
 #include <vector>
 #include "TCPComponent.hpp"
 #include "ImageProcessUnit.hpp"
 
-namespace rr{
+namespace rr {
     class VideoStreamer {
     private:
         ImageProcessUnit *imageProcessUnit = nullptr;
         bool isStop;
     public:
-        
-        VideoStreamer():isStop(false) {
+
+        VideoStreamer() : isStop(false) {
             imageProcessUnit = new ImageProcessUnit();
         }
-        
+
         void start();
+
         void stop();
+
         void setConstract();
-        
+
     private:
-        void sendVideoFrame(std::vector<uchar>& imageData);
-        
+        void sendVideoFrame(std::vector<uchar> &imageData);
+
     };
 }
 
