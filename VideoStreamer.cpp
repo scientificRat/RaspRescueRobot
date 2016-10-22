@@ -8,6 +8,7 @@
 
 #include "VideoStreamer.h"
 
+<<<<<<< HEAD
 namespace rr{
 
 //constructor
@@ -22,26 +23,35 @@ void VideoStreamer::start(){
     while (!this->isStop) {
 		 std::vector<uchar>& image=this->imageProcessUnit->getEncodeImage();
 		 sendVideoFrame(image);
+=======
+namespace rr {
+    void VideoStreamer::start() {
+        this->imageProcessUnit->start();
+        this->isStop = false;
+        while (!this->isStop) {
+            std::vector<uchar> &image = this->imageProcessUnit->getEncodeImage();
+            sendVideoFrame(image);
+        }
+        this->imageProcessUnit->stop();
+>>>>>>> origin/master
     }
-    this->imageProcessUnit->stop();
-}
 
-void VideoStreamer::stop(){
-    this->isStop=true;
-}
+    void VideoStreamer::stop() {
+        this->isStop = true;
+    }
 
-void VideoStreamer::sendVideoFrame(std::vector<uchar>& imageData){
-    TCPComponent& tcpComponent = TCPComponent::getInstance();
-    char type='v';
-    int length=static_cast<int>(imageData.size());
-	
-	//just for debug
-	std::cout << "imageData length: "<<length <<std::endl;
-	
-    tcpComponent.sendMessage(&type,1);
-    tcpComponent.sendMessage(&length,4);
-    tcpComponent.sendMessage(imageData.data(), imageData.size());
+    void VideoStreamer::sendVideoFrame(std::vector<uchar> &imageData) {
+        TCPComponent &tcpComponent = TCPComponent::getInstance();
+        char type = 'v';
+        int length = static_cast<int>(imageData.size());
 
-}
+        //just for debug
+        std::cout << "imageData length: " << length << std::endl;
+
+        tcpComponent.sendMessage(&type, 1);
+        tcpComponent.sendMessage(&length, 4);
+        tcpComponent.sendMessage(imageData.data(), imageData.size());
+
+    }
 
 }
