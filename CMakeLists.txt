@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 2.8)
 project(rescueRobot)
-#set(raspicam_DIR /home/pi/raspicam-0.1.3/build)
+#依赖于本地raspicam_dir路径
+set(raspicam_DIR /home/pi/raspicam-0.1.3/build)
 find_package(raspicam REQUIRED)
 find_package(OpenCV)
 FIND_PACKAGE(OpenMP)
@@ -23,6 +24,7 @@ IF (OpenCV_FOUND AND raspicam_CV_FOUND)
             Services.cpp
             TCPComponent.cpp
             VideoStreamer.cpp
+            CarHardware.cpp
             dist/jsoncpp.cpp
             )
 

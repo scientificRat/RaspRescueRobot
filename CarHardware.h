@@ -57,8 +57,7 @@ namespace rr{
                 return car;
             }
             
-            
-            void run(int left,int right);
+            void run(float left,float right);
             void goForward(double speed);
             void goBackward(double speed);
             void turnLeft(double speed);

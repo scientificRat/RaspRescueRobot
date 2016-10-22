@@ -8,11 +8,31 @@
 #include "CarHardware.h"
 
 namespace rr{
-	CarHardware::CarHardware();
-    void CarHardware::run(int left,int right);
-    void CarHardware::goForward(double speed);
-    void CarHardware::goBackward(double speed);
-    void CarHardware::turnLeft(double speed);
-    void CarHardware::turnRight(double speed);
-    void stop();
+	CarHardware::CarHardware(){
+
+	}
+	
+    void CarHardware::run(int left,int right){
+
+    }
+
+    void CarHardware::goForward(double speed){
+
+    }
+
+    void CarHardware::goBackward(double speed){
+
+    }
+
+    void CarHardware::turnLeft(double speed){
+
+    }
+
+    void CarHardware::turnRight(double speed){
+
+    }
+    
+    void CarHardware::stop(){
+
+    }
 }
