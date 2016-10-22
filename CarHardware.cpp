@@ -8,11 +8,11 @@
 #include "CarHardware.h"
 
 namespace rr{
-	CarHardware::CarHardware(){
+    CarHardware::CarHardware(){
 
-	}
-	
-    void CarHardware::run(int left,int right){
+    }
+
+    void CarHardware::run(float left,float right){
 
     }
 
