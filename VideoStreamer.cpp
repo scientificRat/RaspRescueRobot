@@ -3,6 +3,7 @@
 //  rescueRobot
 //
 //  Created by 黄正跃 on 23/09/2016.
+//  Last Modified by Wang han on 23/10/2016
 //  Copyright © 2016 黄正跃. All rights reserved.
 //
 
@@ -19,7 +20,7 @@ namespace rr{
     //start VideoStramer
     void VideoStreamer::start() {
         this->imageProcessUnit->start();
-        this->isStop = false;
+        
         while (!this->isStop) {
             std::vector<uchar> &image = this->imageProcessUnit->getEncodeImage();
             sendVideoFrame(image);

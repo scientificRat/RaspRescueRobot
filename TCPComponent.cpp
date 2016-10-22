@@ -3,13 +3,15 @@
 //  rescueRobot
 //
 //  Created by 黄正跃 on 25/09/2016.
+//  Last Modified by Wang han on 23/10/2016
 //  Copyright © 2016 黄正跃. All rights reserved.
 //
 
+#include <string>
+
 #include "TCPComponent.h"
 #include "Services.h"
-
-#include <string>
+#include "CarHardware.h"
 
 namespace rr{
     TCPComponent::TCPComponent():
@@ -66,7 +68,6 @@ namespace rr{
          read(this->sockfd,headBuffer, 5);
          char* dataBuffer = new char[*((int*)(headBuffer+1))];
          read(this->sockfd,dataBuffer,*((int*)(headBuffer+1)));
-         
          //just for debug
          std::cout << dataBuffer <<std::endl;
          
@@ -92,7 +93,10 @@ namespace rr{
              }else{
 
              }
-         }       
+         }
+
+         delete[] headBuffer;
+         delete[] dataBuffer;       
          std::cerr << "No ResponseJson "<<std::endl;
     }
 
@@ -113,8 +117,10 @@ namespace rr{
             std::cout << dataBuffer<<std::endl;
             
             if(headBuffer[0]=='c'){
-                float left=*((float*)dataBuffer);
-                float right=*((float*)dataBuffer+1);
+                 float left=*((float*)dataBuffer);
+                 float right=*((float*)dataBuffer+1);
+
+                 CarHardware& car = rr::CarHardware::getInstance();
             }
             else if(headBuffer[0]=='m'){
                  std::string action ="";
@@ -139,7 +145,11 @@ namespace rr{
             else {
                  std::cout << "ResponseJson error" << std::endl;
             }
+            
+            delete[] headBuffer;
+            delete[] dataBuffer;
         }//end of while
+
     }
     
     void TCPComponent::sendMessage(const void *data, int length) {
@@ -167,18 +177,21 @@ namespace rr{
     }//end of sendMessage
 
     void TCPComponent::sendRequest(const char* JSONBytes, int length){
-     char *sendBuffer = new char[5+length];
-     sendBuffer[0] = 'r';
-     char* ptr = (char*)&length;
-     sendBuffer[1] = *ptr;
-     sendBuffer[2] = *(ptr+1);
-     sendBuffer[3] = *(ptr+2);
-     sendBuffer[4] = *(ptr+3);   
-    for(int i=5;i<5+length;i++){
-         sendBuffer[i] = JSONBytes[i-5];
-     }
-     
-     sendMessage(sendBuffer,5+length);
+         char *sendBuffer = new char[5+length];
+         sendBuffer[0] = 'r';
+         char* ptr = (char*)&length;
+         sendBuffer[1] = *ptr;
+         sendBuffer[2] = *(ptr+1);
+         sendBuffer[3] = *(ptr+2);
+         sendBuffer[4] = *(ptr+3);
+            
+         for(int i=5;i<5+length;i++){
+             sendBuffer[i] = JSONBytes[i-5];
+         }
+         sendMessage(sendBuffer,5+length);
+
+         delete[] sendBuffer;
+         delete ptr;
     }//end of sendRequest
 
 }

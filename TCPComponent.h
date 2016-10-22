@@ -3,6 +3,7 @@
 //  rescueRobot
 //
 //  Created by 黄正跃 on 25/09/2016.
+//  Last Modified by Wang han on 23/10/2016
 //  Copyright © 2016 黄正跃. All rights reserved.
 //
 
@@ -56,8 +57,8 @@ namespace rr {
 
         //the interface to send string data
         void sendRequest(const char* JSONBytes, int length);
-        //init TCPComponent
-        void init();
+        //login server
+        void login();
         
     private:
         
