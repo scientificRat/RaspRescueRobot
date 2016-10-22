@@ -64,4 +64,4 @@ namespace rr {
 
     };
 }
-#endif
+#endif/*RASPBERRY_ROBOT_IMAGE_PROCESS__*/

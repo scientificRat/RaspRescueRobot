@@ -51,7 +51,6 @@ namespace rr {
         TCPComponent(const TCPComponent&) = delete;
         TCPComponent& operator=(const TCPComponent&)  = delete;
         
-
         //the interface to send raw Message 
         void sendMessage(const void *data, int length);
 

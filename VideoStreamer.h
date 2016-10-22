@@ -38,4 +38,4 @@ namespace rr {
 }
 
 
-#endif /* VideoStreamer_hpp */
+#endif /* RASPBERRY_ROBOT_VIDEOSTREAMER__*/
