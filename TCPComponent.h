@@ -1,13 +1,13 @@
 //
-//  TCPComponent.hpp
+//  TCPComponent.h
 //  rescueRobot
 //
 //  Created by 黄正跃 on 25/09/2016.
 //  Copyright © 2016 黄正跃. All rights reserved.
 //
 
-#ifndef TCPComponent_hpp
-#define TCPComponent_hpp
+#ifndef RASPBERRY_ROBOT_TCPCOMPOENT__
+#define RASPBERRY_ROBOT_TCPCOMPOENT__
 
 #include <thread>
 #include <sys/types.h>
@@ -20,6 +20,7 @@
 #include <unistd.h>
 #include <strings.h>
 #include <mutex>
+#include <errno.h>
 
 #include "dist/json/json.h"
 
@@ -27,12 +28,14 @@ namespace rr{
 
     class TCPComponent {
     private:
-        bool recieveThreadRun  = true;
+        bool recieveThreadRun;
         sockaddr_in workingAddr;
         sockaddr_in serverAddr;
         int sockfd = -1;
         std::mutex sendMutex;
         std::thread* receiveThread = nullptr;
+        std::thread* sendThread = nullptr;
+        const char* serviceAdrress;
         
     public:
         //thread-safe singleton
@@ -45,23 +48,22 @@ namespace rr{
         }
         
         //delete these two dangerous function
-        TCPComponent(const TCPComponent&)    = delete;
-        TCPComponent& operator=(const TCPComponent&)    = delete;
-		
+        TCPComponent(const TCPComponent&) = delete;
+        TCPComponent& operator=(const TCPComponent&)  = delete;
+        
         //the interface to send raw Message (不用size_t 自己定义的应用层协议只允许int这么大)
         void sendMessage(const void* data, int length);
         //the interface to send string data
         void sendRequest(const char* JSONBytes, int length);
-		//init TCPComponent
-		void init();
+        //init TCPComponent
+        void init();
         
     private:
         
         TCPComponent();  
-		//(this that is that this)
+        //(this that is that this)
         static void receive(TCPComponent *that);
         
-
     };
 }
 

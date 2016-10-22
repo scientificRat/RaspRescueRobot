@@ -12,7 +12,7 @@
 #include <string>
 #include <vector>
 
-#include "ImageCaptureUnit.hpp"
+#include "ImageCaptureUnit.h"
 
 namespace rr{
 	class ImageProcessUnit{

@@ -1,28 +1,26 @@
 //
-//  VideoStreamer.hpp
+//  VideoStreamer.h
 //  rescueRobot
 //
 //  Created by 黄正跃 on 23/09/2016.
 //  Copyright © 2016 黄正跃. All rights reserved.
 //
 
-#ifndef VideoStreamer_hpp
-#define VideoStreamer_hpp
+#ifndef RASPBERRY_ROBOT_VIDEOSTREAMER__
+#define RASPBERRY_ROBOT_VIDEOSTREAMER__
 #include <vector>
-#include "TCPComponent.hpp"
-#include "ImageProcessUnit.hpp"
+
+#include "TCPComponent.h"
+#include "ImageProcessUnit.h"
 
 namespace rr{
     class VideoStreamer {
     private:
-        ImageProcessUnit *imageProcessUnit = nullptr;
+        ImageProcessUnit* imageProcessUnit = nullptr;
         bool isStop;
     public:
         
-        VideoStreamer():isStop(false) {
-            imageProcessUnit = new ImageProcessUnit();
-        }
-        
+        VideoStreamer();        
         void start();
         void stop();
         void setConstract();

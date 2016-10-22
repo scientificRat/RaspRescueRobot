@@ -6,16 +6,28 @@
 //  Copyright © 2016 黄正跃. All rights reserved.
 //
 
-#include "Services.hpp"
+#include "Services.h"
 namespace rr{
+
+	//constructor
+	Services::Services(){
+         videoStreamer = new VideoStreamer();
+    }
+
+    //get single instance
+    static Services& Services::getInstance(){
+         static Services services;
+         return services;
+    }
+
     void Services::startVedioStreamer(){
          this->videoStreamer->start();
     }
-	
-	void Services::startConnection(){
-		 TCPComponent& tcpComponent =  rr::TCPComponent::getInstance();
-		 tcpComponent.init();
-		 // tcpComponent.receive(&tcpComponent);
-	}
+    
+    void Services::startConnection(){
+         TCPComponent& tcpComponent =  rr::TCPComponent::getInstance();
+         tcpComponent.init();
+         // tcpComponent.receive(&tcpComponent);
+    }
 }
 

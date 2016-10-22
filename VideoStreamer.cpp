@@ -6,9 +6,16 @@
 //  Copyright © 2016 黄正跃. All rights reserved.
 //
 
-#include "VideoStreamer.hpp"
+#include "VideoStreamer.h"
 
 namespace rr{
+
+//constructor
+VideoStreamer::VideoStreamer():isStop(false) {
+    imageProcessUnit = new ImageProcessUnit();
+}
+
+//start VideoStramer
 void VideoStreamer::start(){
     this->imageProcessUnit->start();
     this->isStop = false;
