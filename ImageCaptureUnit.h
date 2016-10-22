@@ -111,4 +111,4 @@ namespace rr{
              bool mStop;
     };
 }
-#endif
+#endif /*RASPBERRY_ROBOT_IMAGE_CAPTURE__*/
