@@ -42,7 +42,7 @@ namespace rr{
         }
     }
 
-    void TCPComponent::init(){  
+    void TCPComponent::login(){  
      //create json data
          Json::Value root;
          Json::FastWriter writer;
@@ -59,8 +59,8 @@ namespace rr{
          sendRequest(RequestJson.c_str(),RequestJson.length()-1);
          
          Services& services = Services::getInstance();
-		 
-		 //check login info
+         
+         //check login info
          char* headBuffer = new char[5];
          //读取头部信息(type,length) 共5byte
          read(this->sockfd,headBuffer, 5);
@@ -71,25 +71,22 @@ namespace rr{
          std::cout << dataBuffer <<std::endl;
          
          if(headBuffer[0]=='m'){
-             std::string action ="";
+             std::string status ="";
              std::string ResponseJson = std::string(dataBuffer);
              Json::Reader reader;  
              Json::Value root;  
+             //parse the response json
              if (reader.parse(ResponseJson, root)) {  
-                 action = root["success"].asString();  
+                 status = root["success"].asString();  
                  //just for debug
-                 std::cout << action <<std::endl;
+                 std::cout << status <<std::endl;
         
              } 
 
-             if (action == "true"){
-             	 std::cout <<"action is "<<action<<std::endl;
-                //start the sendThread
-                 this->sendThread = new std::thread(&Services::startVedioStreamer,&services);
+             if (status == "true"){
+                 std::cout <<"status is "<<status<<std::endl;
                  //start the receiveThread
                  this->receiveThread = new std::thread(receive, this);
-
-                 this->sendThread->join();
                  this->receiveThread->join();
      
              }else{
@@ -102,6 +99,7 @@ namespace rr{
 
     void TCPComponent::receive(TCPComponent *that) {
         Services& services = Services::getInstance();
+
         while (that->recieveThreadRun){
            
             char* headBuffer = new char[5];
@@ -130,7 +128,9 @@ namespace rr{
                  }  
                  
                  if (action == "startVedio"){
-                    
+                     //start the sendThread
+                     this->sendThread = new std::thread(&Services::startVedioStreamer,&services);
+                     this->sendThread->join();
                  }
                 
                 //just for deubg
@@ -145,7 +145,7 @@ namespace rr{
     void TCPComponent::sendMessage(const void *data, int length) {
          this->sendMutex.lock();
          int writeState = -1;
-		 
+         
          if(this->sockfd <0 || data == nullptr || length < 0) {
             std::cerr <<"write params error."<<std::endl;
             return; 
