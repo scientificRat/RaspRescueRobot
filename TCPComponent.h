@@ -28,24 +28,15 @@ namespace rr {
 
     class TCPComponent {
     private:
-<<<<<<< HEAD:TCPComponent.h
         bool recieveThreadRun;
-=======
-        bool recieveThreadRun = true;
->>>>>>> origin/master:TCPComponent.hpp
         sockaddr_in workingAddr;
         sockaddr_in serverAddr;
         int sockfd = -1;
         std::mutex sendMutex;
-<<<<<<< HEAD:TCPComponent.h
         std::thread* receiveThread = nullptr;
         std::thread* sendThread = nullptr;
         const char* serviceAdrress;
-        
-=======
-        std::thread *receiveThread = nullptr;
 
->>>>>>> origin/master:TCPComponent.hpp
     public:
         //thread-safe singleton
         static TCPComponent &getInstance() {
@@ -57,21 +48,14 @@ namespace rr {
         }
 
         //delete these two dangerous function
-<<<<<<< HEAD:TCPComponent.h
         TCPComponent(const TCPComponent&) = delete;
         TCPComponent& operator=(const TCPComponent&)  = delete;
         
-=======
-        TCPComponent(const TCPComponent &) = delete;
 
-        TCPComponent &operator=(const TCPComponent &) = delete;
-
->>>>>>> origin/master:TCPComponent.hpp
-        //the interface to send raw Message (不用size_t 自己定义的应用层协议只允许int这么大)
+        //the interface to send raw Message 
         void sendMessage(const void *data, int length);
 
         //the interface to send string data
-<<<<<<< HEAD:TCPComponent.h
         void sendRequest(const char* JSONBytes, int length);
         //init TCPComponent
         void init();
@@ -82,22 +66,7 @@ namespace rr {
         //(this that is that this)
         static void receive(TCPComponent *that);
         
-=======
-        void sendRequest(const char *JSONBytes, int length);
-
-        //init TCPComponent
-        void init();
-
-    private:
-
-        TCPComponent();
-
-        //(this that is that this)
-        static void receive(TCPComponent *that);
-
-
->>>>>>> origin/master:TCPComponent.hpp
     };
 }
 
-#endif /* TCPComponent_hpp */
+#endif /* RASPBERRY_ROBOT_TCPCOMPOENT__*/

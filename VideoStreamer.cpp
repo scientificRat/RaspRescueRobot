@@ -8,23 +8,15 @@
 
 #include "VideoStreamer.h"
 
-<<<<<<< HEAD
+
 namespace rr{
 
-//constructor
-VideoStreamer::VideoStreamer():isStop(false) {
-    imageProcessUnit = new ImageProcessUnit();
-}
+    //constructor
+    VideoStreamer::VideoStreamer():isStop(false) {
+        imageProcessUnit = new ImageProcessUnit();
+    }
 
-//start VideoStramer
-void VideoStreamer::start(){
-    this->imageProcessUnit->start();
-    this->isStop = false;
-    while (!this->isStop) {
-		 std::vector<uchar>& image=this->imageProcessUnit->getEncodeImage();
-		 sendVideoFrame(image);
-=======
-namespace rr {
+    //start VideoStramer
     void VideoStreamer::start() {
         this->imageProcessUnit->start();
         this->isStop = false;
@@ -33,7 +25,7 @@ namespace rr {
             sendVideoFrame(image);
         }
         this->imageProcessUnit->stop();
->>>>>>> origin/master
+
     }
 
     void VideoStreamer::stop() {

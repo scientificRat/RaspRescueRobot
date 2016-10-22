@@ -16,7 +16,10 @@ namespace rr{
      private:
          VideoStreamer *videoStreamer =nullptr;
      public:
-         static Services& getInstance();
+         static Services& getInstance(){
+			static Services services;
+			return services;
+		}
         
          Services();
         

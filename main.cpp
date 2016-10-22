@@ -7,7 +7,7 @@
 //
 
 #include <iostream>
-<<<<<<< HEAD
+
 #include "Services.h"
 int main(int argc, const char * argv[]) {
      rr::Services& services = rr::Services::getInstance();
@@ -16,15 +16,4 @@ int main(int argc, const char * argv[]) {
      services.startConnection();
     
      return 0;
-=======
-#include "Services.hpp"
-
-int main(int argc, const char *argv[]) {
-    rr::Services &services = rr::Services::getInstance();
-    //services.startVedioStreamer();
-
-    services.startConnection();
-
-    return 0;
->>>>>>> origin/master
 }

@@ -6,14 +6,11 @@
 //  Copyright © 2016 黄正跃. All rights reserved.
 //
 
-<<<<<<< HEAD:VideoStreamer.h
+
 #ifndef RASPBERRY_ROBOT_VIDEOSTREAMER__
 #define RASPBERRY_ROBOT_VIDEOSTREAMER__
-=======
-#ifndef VideoStreamer_hpp
-#define VideoStreamer_hpp
 
->>>>>>> origin/master:VideoStreamer.hpp
+
 #include <vector>
 
 #include "TCPComponent.h"
@@ -25,16 +22,9 @@ namespace rr {
         ImageProcessUnit* imageProcessUnit = nullptr;
         bool isStop;
     public:
-<<<<<<< HEAD:VideoStreamer.h
         
-        VideoStreamer();        
-=======
-
-        VideoStreamer() : isStop(false) {
-            imageProcessUnit = new ImageProcessUnit();
-        }
-
->>>>>>> origin/master:VideoStreamer.hpp
+        VideoStreamer();     
+           
         void start();
 
         void stop();

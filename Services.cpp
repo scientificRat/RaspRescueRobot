@@ -6,7 +6,6 @@
 //  Copyright © 2016 黄正跃. All rights reserved.
 //
 
-<<<<<<< HEAD
 #include "Services.h"
 namespace rr{
 
@@ -14,13 +13,7 @@ namespace rr{
 	Services::Services(){
          videoStreamer = new VideoStreamer();
     }
-
-    //get single instance
-    static Services& Services::getInstance(){
-         static Services services;
-         return services;
-    }
-
+	
     void Services::startVedioStreamer(){
          this->videoStreamer->start();
     }
@@ -30,19 +23,5 @@ namespace rr{
          tcpComponent.init();
          // tcpComponent.receive(&tcpComponent);
     }
-=======
-#include "Services.hpp"
-
-namespace rr {
-    void Services::startVedioStreamer() {
-        this->videoStreamer->start();
-    }
-
-    void Services::startConnection() {
-        TCPComponent &tcpComponent = rr::TCPComponent::getInstance();
-        tcpComponent.init();
-        // tcpComponent.receive(&tcpComponent);
-    }
->>>>>>> origin/master
 }
 
