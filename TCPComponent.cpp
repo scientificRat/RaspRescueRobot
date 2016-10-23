@@ -119,8 +119,13 @@ namespace rr{
             if(headBuffer[0]=='c'){
                  float left=*((float*)dataBuffer);
                  float right=*((float*)dataBuffer+1);
-
-                 CarHardware& car = rr::CarHardware::getInstance();
+                 if (services.hardwareIsStarted()){
+                     services.move((int)left,(int)right);
+                 }
+                 else{
+                     services.startMovementHardware();
+                     services.move((int)left,(int)right);
+                 }            
             }
             else if(headBuffer[0]=='m'){
                  std::string action ="";

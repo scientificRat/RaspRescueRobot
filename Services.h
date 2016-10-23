@@ -11,11 +11,14 @@
 #define RASPBERRY_ROBOT_SERVICES__
 
 #include "VideoStreamer.h"
+#include "CarHardware.h"
 
 namespace rr{
      class Services {
      private:
-         VideoStreamer *videoStreamer =nullptr;
+         VideoStreamer *videoStreamer = nullptr;
+         CarHardware* car = nullptr;
+         bool hardwareState;
      public:
          static Services& getInstance(){
 			static Services services;
@@ -32,9 +35,14 @@ namespace rr{
          void startConnection();
         
          void startMovementHardware();
-        
-         void move(float,float);
-        
+
+         //stop and release hardware resources
+         void stopMovementhardwar();     
+
+         bool hardwareIsStarted();   
+         
+         void move(float left,float right);
+
     };
 
 }

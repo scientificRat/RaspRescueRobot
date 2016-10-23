@@ -14,6 +14,7 @@
 #include <iostream>
 #include <wiringPi.h>
 #include <softPwm.h>
+#include <mutex>
 /*
  +-----+-----+---------+------+---+---Pi 2---+---+------+---------+-----+-----+
  | BCM | wPi |   Name  | Mode | V | Physical | V | Mode | Name    | wPi | BCM |
@@ -47,22 +48,45 @@
 namespace rr{
     class CarHardware{
         private:
-
+            //motor pins (connect to L298N)
+            int MOTOR_LEFT_1;
+            int MOTOR_LEFT_2;
+            int MOTOR_RIGHT_1;
+            int MOTOR_RIGHT_2;
+            //single instance
+            static CarHardware* car;
+            bool carRun; 
+            //instance mutex
+            std::mutex instanceMutex;
             //private constructor
-            CarHardware();
+            CarHardware(int motor_left_1,int motor_left_2,int motor_right_1,int motor_right_2);
+
         public:
 
-            static CarHardware& getInstance(){
-                static CarHardware car;
+            //thread safe single instance
+            CarHardware* getInstance(){
+                if (nullptr == car){
+                    instanceMutex.lock();
+                    if (nullptr == car){
+                        /*
+                            MOTOR_LEFT_1=8;
+                            MOTOR_LEFT_2=9;
+                            MOTOR_RIGHT_1=7;
+                            MOTOR_RIGHT_2=0;
+                        */
+                        car = new CarHardware(8,9,7,0);
+                    }
+                    instanceMutex.unlock();
+                }
                 return car;
             }
             
+            void start();
+            
             void run(float left,float right);
-            void goForward(double speed);
-            void goBackward(double speed);
-            void turnLeft(double speed);
-            void turnRight(double speed);
-            void stop();
+
+            //release car resources
+            void release();
         
     };
 }
