@@ -15,11 +15,11 @@ namespace rr{
     hardwareState(false){
          videoStreamer = new VideoStreamer();
     }
-	
+
     void Services::startVedioStreamer(){
          this->videoStreamer->start();
     }
-    
+
     void Services::startConnection(){
          TCPComponent& tcpComponent =  rr::TCPComponent::getInstance();
          tcpComponent.login();
@@ -30,28 +30,27 @@ namespace rr{
         // int MOTOR_LEFT_2=9;
         // int MOTOR_RIGHT_1=7;
         // int MOTOR_RIGHT_2=0;
-        //create an instance of car 
-        this->car = rr::CarHardware::getInstance();  
-        this->car->start();      
+        //create an instance of car
+        this->car = rr::CarHardware::getInstance();
+        this->car->start();
     }
 
     //stop and release hardware resources
-    void Services::stopMovementHardware(){     
+    void Services::stopMovementHardware(){
         this->car = rr:CarHardware::getInstance();
         this->car->release();
     }
 
     bool Services::hardwareIsStarted(){
         return this->hardwareState;
-    } 
+    }
 
     void Services::move(float left,float right){
         if (true == this->hardwareIsStarted()){
-            this->car = rr::CarHardware::getInstance(); 
-            this->car->run((int)left,(int)right);
+            this->car = rr::CarHardware::getInstance();
+            this->car->run(left,right);
         }else{
             std::cerr<<"You should start hardware at first."<<std::endl;
         }
     }
 }
-

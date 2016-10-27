@@ -13,6 +13,7 @@ namespace rr{
         MOTOR_LEFT_2(motor_left_2),
         MOTOR_RIGHT_1(motor_right_1),
         MOTOR_RIGHT_2(motor_right_2),
+        speed(1024),
         carRun(false) {
             wiringPiSetup();//initial all
             softPwmCreate (MOTOR_LEFT_1, 0, 1024);
@@ -27,8 +28,8 @@ namespace rr{
 
     void CarHardware::run(float left,float right){
         while (this->carRun){
-            int mLeft = (int)left;
-            int mRight = (int)right;
+            int mLeft = (int) speed * left;
+            int mRight = (int) speed * right;
             if (mLeft == 0 && mRight == 0 ){
                 softPwmWrite (MOTOR_LEFT_1,0);
                 softPwmWrite (MOTOR_LEFT_2,0);
@@ -57,7 +58,7 @@ namespace rr{
             }
         }
     }
-    
+
     //release car resources
     void CarHardware::release(){
         this->carRun = false;

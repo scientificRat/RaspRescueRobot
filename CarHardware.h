@@ -42,7 +42,7 @@
  +-----+-----+---------+------+---+----++----+---+------+---------+-----+-----+
  | BCM | wPi |   Name  | Mode | V | Physical | V | Mode | Name    | wPi | BCM |
  +-----+-----+---------+------+---+---Pi 2---+---+------+---------+-----+-----+
- 
+
  */
 
 namespace rr{
@@ -55,7 +55,8 @@ namespace rr{
             int MOTOR_RIGHT_2;
             //single instance
             static CarHardware* car;
-            bool carRun; 
+            const int speed;
+            bool carRun;
             //instance mutex
             std::mutex instanceMutex;
             //private constructor
@@ -80,14 +81,14 @@ namespace rr{
                 }
                 return car;
             }
-            
+
             void start();
-            
+
             void run(float left,float right);
 
             //release car resources
             void release();
-        
+
     };
 }
 #endif /*RASPBERRY_ROBOT_CAR_HARDWARE__*/

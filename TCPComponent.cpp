@@ -3,7 +3,7 @@
 //  rescueRobot
 //
 //  Created by 黄正跃 on 25/09/2016.
-//  Last Modified by Wang han on 23/10/2016
+//  Last Modified by Wang han on 28/10/2016
 //  Copyright © 2016 黄正跃. All rights reserved.
 //
 
@@ -44,7 +44,7 @@ namespace rr{
         }
     }
 
-    void TCPComponent::login(){  
+    void TCPComponent::login(){
      //create json data
          Json::Value root;
          Json::FastWriter writer;
@@ -52,16 +52,16 @@ namespace rr{
          root["loginName"] = Json::Value("caesar");
          root["password"] = Json::Value("123456");
          std::string RequestJson = writer.write(root); //含有'\n'
-        
+
          //just for debug
          std::cout <<"RequestJson :"<<RequestJson<<std::endl;
-         std::cout <<"RequestJson.length : "<<RequestJson.length()<<std::endl; 
-         
+         std::cout <<"RequestJson.length : "<<RequestJson.length()<<std::endl;
+
          // 发送登录请求
          sendRequest(RequestJson.c_str(),RequestJson.length()-1);
-         
+
          Services& services = Services::getInstance();
-         
+
          //check login info
          char* headBuffer = new char[5];
          //读取头部信息(type,length) 共5byte
@@ -70,33 +70,33 @@ namespace rr{
          read(this->sockfd,dataBuffer,*((int*)(headBuffer+1)));
          //just for debug
          std::cout << dataBuffer <<std::endl;
-         
+
          if(headBuffer[0]=='m'){
              std::string status ="";
              std::string ResponseJson = std::string(dataBuffer);
-             Json::Reader reader;  
-             Json::Value root;  
+             Json::Reader reader;
+             Json::Value root;
              //parse the response json
-             if (reader.parse(ResponseJson, root)) {  
-                 status = root["success"].asString();  
+             if (reader.parse(ResponseJson, root)) {
+                 status = root["success"].asString();
                  //just for debug
                  std::cout << status <<std::endl;
-        
-             } 
+
+             }
 
              if (status == "true"){
                  std::cout <<"status is "<<status<<std::endl;
                  //start the receiveThread
                  this->receiveThread = new std::thread(receive, this);
                  this->receiveThread->join();
-     
+
              }else{
 
              }
          }
 
          delete[] headBuffer;
-         delete[] dataBuffer;       
+         delete[] dataBuffer;
          std::cerr << "No ResponseJson "<<std::endl;
     }
 
@@ -105,75 +105,75 @@ namespace rr{
         Services& services = Services::getInstance();
 
         while (that->recieveThreadRun){
-           
+
             char* headBuffer = new char[5];
             //读取头部信息(type,length) 共5byte
             read(that->sockfd,headBuffer, 5);
             char* dataBuffer = new char[*((int*)(headBuffer+1))];
             read(that->sockfd,dataBuffer,*((int*)(headBuffer+1)));
             // (注意：服务器返回的消息type='m' 内容为json, 控制端发送的消息type ='c'表示命令)
-            
+
             //debug
             std::cout << dataBuffer<<std::endl;
-            
+
             if(headBuffer[0]=='c'){
                  float left=*((float*)dataBuffer);
                  float right=*((float*)dataBuffer+1);
                  if (services.hardwareIsStarted()){
-                     services.move((int)left,(int)right);
+                     services.move(left,right);
                  }
                  else{
                      services.startMovementHardware();
-                     services.move((int)left,(int)right);
-                 }            
+                     services.move(left,right);
+                 }
             }
             else if(headBuffer[0]=='m'){
                  std::string action ="";
                  std::string ResponseJson = std::string(dataBuffer);
-                 Json::Reader reader;  
-                 Json::Value root;  
-                 if (reader.parse(ResponseJson, root)) 
-                 {  
-                     action = root["action"].asString();  
+                 Json::Reader reader;
+                 Json::Value root;
+                 if (reader.parse(ResponseJson, root))
+                 {
+                     action = root["action"].asString();
                      std::cout << action <<std::endl;
-                 }  
-                 
+                 }
+
                  if (action == "startVedio"){
                      //start the sendThread
                      this->sendThread = new std::thread(&Services::startVedioStreamer,&services);
                      this->sendThread->join();
                  }
-                
+
                 //just for deubg
                 std::cerr<<"ResponseJson: "<<ResponseJson<<std::endl;
             }
             else {
                  std::cout << "ResponseJson error" << std::endl;
             }
-            
+
             delete[] headBuffer;
             delete[] dataBuffer;
         }//end of while
 
     }
-    
+
     void TCPComponent::sendMessage(const void *data, int length) {
          this->sendMutex.lock();
          int writeState = -1;
-         
+
          if(this->sockfd <0 || data == nullptr || length < 0) {
             std::cerr <<"write params error."<<std::endl;
-            return; 
+            return;
          }
 
          writeState = write(this->sockfd,data,length);
-         
+
          if(writeState<=0)
-         {       
+         {
             if(errno==EINTR) {
                 std::cerr <<"server socket write error."<<std::endl;
             }
-            else if(errno == EPIPE) {          
+            else if(errno == EPIPE) {
                 std::cerr <<"server socket had been closed."<<std::endl;
                 exit(0);
             }
@@ -189,7 +189,7 @@ namespace rr{
          sendBuffer[2] = *(ptr+1);
          sendBuffer[3] = *(ptr+2);
          sendBuffer[4] = *(ptr+3);
-            
+
          for(int i=5;i<5+length;i++){
              sendBuffer[i] = JSONBytes[i-5];
          }
@@ -200,6 +200,3 @@ namespace rr{
     }//end of sendRequest
 
 }
-     
-
-

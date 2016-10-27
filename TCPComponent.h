@@ -3,7 +3,7 @@
 //  rescueRobot
 //
 //  Created by 黄正跃 on 25/09/2016.
-//  Last Modified by Wang han on 23/10/2016
+//  Last Modified by Wang han on 28/10/2016
 //  Copyright © 2016 黄正跃. All rights reserved.
 //
 
@@ -51,21 +51,21 @@ namespace rr {
         //delete these two dangerous function
         TCPComponent(const TCPComponent&) = delete;
         TCPComponent& operator=(const TCPComponent&)  = delete;
-        
-        //the interface to send raw Message 
+
+        //the interface to send raw Message
         void sendMessage(const void *data, int length);
 
         //the interface to send string data
         void sendRequest(const char* JSONBytes, int length);
         //login server
         void login();
-        
+
     private:
-        
-        TCPComponent();  
+
+        TCPComponent();
         //(this that is that this)
         static void receive(TCPComponent *that);
-        
+
     };
 }
 
