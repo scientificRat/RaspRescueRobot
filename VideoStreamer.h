@@ -32,6 +32,8 @@ namespace rr {
 
         void setConstract();
 
+        bool isStarted();
+
     private:
         void sendVideoFrame(std::vector<uchar> &imageData);
 

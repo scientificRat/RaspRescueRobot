@@ -13,7 +13,8 @@
 namespace rr{
 
     //constructor
-    VideoStreamer::VideoStreamer():isStop(false) {
+    VideoStreamer::VideoStreamer()
+    :isStop(false) {
         imageProcessUnit = new ImageProcessUnit();
     }
 

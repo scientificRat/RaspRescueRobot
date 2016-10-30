@@ -19,6 +19,7 @@ namespace rr{
          VideoStreamer *videoStreamer = nullptr;
          CarHardware* car = nullptr;
          bool hardwareState;
+         bool streamerState;
      public:
          static Services& getInstance(){
 			static Services services;
@@ -31,6 +32,8 @@ namespace rr{
          Services& operator=(const Services&)  = delete;
         
          void startVedioStreamer();
+
+         void stopVedioStreamer();
         
          void startConnection();
         
@@ -40,6 +43,8 @@ namespace rr{
          void stopMovementHardware();     
 
          bool hardwareIsStarted();   
+
+         bool streamerISStarted();
          
          void move(float left,float right);
 

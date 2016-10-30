@@ -61,6 +61,7 @@ namespace rr {
 
         //the interface to send string data
         void sendRequest(const char* JSONBytes, int length);
+        
         //login server
         void login();
 

@@ -8,7 +8,8 @@
 //
 
 #include <string>
-
+#include <iomanip>
+#include <stdio.h>
 #include "TCPComponent.h"
 #include "Services.h"
 #include "CarHardware.h"
@@ -54,11 +55,11 @@ namespace rr{
          root["requestType"] = Json::Value("login");
          root["loginName"] = Json::Value("caesar");
          root["password"] = Json::Value("123456");
-         std::string RequestJson = writer.write(root); //含有'\n'
+         std::string RequestJson = writer.write(root); //include '\n'
 
          //just for debug
-         std::cout <<"RequestJson :"<<RequestJson<<std::endl;
-         std::cout <<"RequestJson.length : "<<RequestJson.length()<<std::endl;
+         //std::cout <<"RequestJson :"<<RequestJson<<std::endl;
+         //std::cout <<"RequestJson.length : "<<RequestJson.length()<<std::endl;
 
          // 发送登录请求
          sendRequest(RequestJson.c_str(),RequestJson.length()-1);
@@ -71,8 +72,10 @@ namespace rr{
          read(this->sockfd,headBuffer, 5);
          char* dataBuffer = new char[*((int*)(headBuffer+1))];
          read(this->sockfd,dataBuffer,*((int*)(headBuffer+1)));
+         
          //just for debug
-         std::cout << dataBuffer <<std::endl;
+         printf("headBuffer : %d %d %d %d\n", headBuffer[0],headBuffer[1],headBuffer[2],headBuffer[3],headBuffer[4]);
+         std::cout << dataBuffer<<std::endl;
 
          if(headBuffer[0]=='m'){
              std::string status ="";
@@ -82,13 +85,13 @@ namespace rr{
              //parse the response json
              if (reader.parse(ResponseJson, root)) {
                  status = root["success"].asString();
+                 
                  //just for debug
-                 std::cout << status <<std::endl;
+                 std::cout <<"status is "<<status<<std::endl;
 
              }
 
              if (status == "true"){
-                 std::cout <<"status is "<<status<<std::endl;
                  //start the receiveThread
                  this->receiveThread = new std::thread(receive, this);
                  this->receiveThread->join();
@@ -142,10 +145,14 @@ namespace rr{
                  }
 
                  if (action == "startVedio"){
-                     //start the sendThread
-                     sendThread = new std::thread(&Services::startVedioStreamer,&services);
-                     sendThread->join();
-                 }
+                    if (!services.streamerISStarted())
+                         //start the sendThread
+                         std::cerr<<"streamer had been started!"<<std::endl;
+                    else{
+                         sendThread = new std::thread(&Services::startVedioStreamer,&services);
+                         std::cout<<"video streamer started!"<<std::endl;
+                    }
+                }
 
                 //just for deubg
                 std::cerr<<"ResponseJson: "<<ResponseJson<<std::endl;
