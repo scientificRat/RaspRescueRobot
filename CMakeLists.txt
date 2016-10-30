@@ -22,9 +22,9 @@ IF (OpenCV_FOUND AND raspicam_CV_FOUND)
             ImageCaptureUnit.cpp
             ImageProcessUnit.cpp
             Services.cpp
+            CarHardware.cpp
             TCPComponent.cpp
             VideoStreamer.cpp
-            CarHardware.cpp
             dist/jsoncpp.cpp
             )
 

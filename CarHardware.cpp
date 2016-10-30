@@ -8,6 +8,11 @@
 #include "CarHardware.h"
 
 namespace rr{
+    
+    CarHardware* CarHardware::car = nullptr;
+
+    std::mutex CarHardware::instanceMutex;
+
     CarHardware::CarHardware(int motor_left_1,int motor_left_2,int motor_right_1,int motor_right_2)
         :MOTOR_LEFT_1(motor_left_1),
         MOTOR_LEFT_2(motor_left_2),

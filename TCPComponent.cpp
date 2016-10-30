@@ -14,6 +14,9 @@
 #include "CarHardware.h"
 
 namespace rr{
+
+    std::thread* TCPComponent::sendThread = nullptr;
+    
     TCPComponent::TCPComponent():
     serviceAdrress("123.206.21.185"),recieveThreadRun(true) {
         //create tcp socket
