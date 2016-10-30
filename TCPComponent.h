@@ -29,13 +29,17 @@ namespace rr {
 
     class TCPComponent {
     private:
+        TCPComponent();
+        //(this that is that this)
+        static void receive(TCPComponent *that);
+
         bool recieveThreadRun;
         sockaddr_in workingAddr;
         sockaddr_in serverAddr;
         int sockfd = -1;
         std::mutex sendMutex;
         std::thread* receiveThread = nullptr;
-        std::thread* sendThread = nullptr;
+        static std::thread* sendThread;
         const char* serviceAdrress;
 
     public:
@@ -60,11 +64,7 @@ namespace rr {
         //login server
         void login();
 
-    private:
 
-        TCPComponent();
-        //(this that is that this)
-        static void receive(TCPComponent *that);
 
     };
 }

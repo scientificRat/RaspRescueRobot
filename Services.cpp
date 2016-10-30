@@ -8,6 +8,8 @@
 //
 
 #include "Services.h"
+#include "CarHardware.h"
+
 namespace rr{
 
 	//constructor
@@ -31,24 +33,24 @@ namespace rr{
         // int MOTOR_RIGHT_1=7;
         // int MOTOR_RIGHT_2=0;
         //create an instance of car
-        this->car = rr::CarHardware::getInstance();
-        this->car->start();
+        car = rr::CarHardware::getInstance();
+        car->start();
     }
 
     //stop and release hardware resources
     void Services::stopMovementHardware(){
-        this->car = rr:CarHardware::getInstance();
-        this->car->release();
+        car = rr::CarHardware::getInstance();
+        car->release();
     }
 
     bool Services::hardwareIsStarted(){
-        return this->hardwareState;
+        return hardwareState;
     }
 
     void Services::move(float left,float right){
-        if (true == this->hardwareIsStarted()){
-            this->car = rr::CarHardware::getInstance();
-            this->car->run(left,right);
+        if (true == hardwareIsStarted()){
+            car = rr::CarHardware::getInstance();
+            car->run(left,right);
         }else{
             std::cerr<<"You should start hardware at first."<<std::endl;
         }

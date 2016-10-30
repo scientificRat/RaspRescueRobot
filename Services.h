@@ -37,7 +37,7 @@ namespace rr{
          void startMovementHardware();
 
          //stop and release hardware resources
-         void stopMovementhardwar();     
+         void stopMovementHardware();     
 
          bool hardwareIsStarted();   
          

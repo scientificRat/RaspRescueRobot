@@ -140,8 +140,8 @@ namespace rr{
 
                  if (action == "startVedio"){
                      //start the sendThread
-                     this->sendThread = new std::thread(&Services::startVedioStreamer,&services);
-                     this->sendThread->join();
+                     sendThread = new std::thread(&Services::startVedioStreamer,&services);
+                     sendThread->join();
                  }
 
                 //just for deubg
@@ -196,7 +196,6 @@ namespace rr{
          sendMessage(sendBuffer,5+length);
 
          delete[] sendBuffer;
-         delete ptr;
     }//end of sendRequest
 
 }

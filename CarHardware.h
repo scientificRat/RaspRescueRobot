@@ -58,14 +58,14 @@ namespace rr{
             const int speed;
             bool carRun;
             //instance mutex
-            std::mutex instanceMutex;
+            static std::mutex instanceMutex;
             //private constructor
             CarHardware(int motor_left_1,int motor_left_2,int motor_right_1,int motor_right_2);
 
         public:
 
             //thread safe single instance
-            CarHardware* getInstance(){
+            static CarHardware* getInstance(){
                 if (nullptr == car){
                     instanceMutex.lock();
                     if (nullptr == car){
