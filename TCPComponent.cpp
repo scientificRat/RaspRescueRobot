@@ -17,7 +17,7 @@
 namespace rr{
 
     std::thread* TCPComponent::sendThread = nullptr;
-    
+
     TCPComponent::TCPComponent():
     serviceAdrress("123.206.21.185"),recieveThreadRun(true) {
         //create tcp socket
@@ -72,7 +72,7 @@ namespace rr{
          read(this->sockfd,headBuffer, 5);
          char* dataBuffer = new char[*((int*)(headBuffer+1))];
          read(this->sockfd,dataBuffer,*((int*)(headBuffer+1)));
-         
+
          //just for debug
          printf("headBuffer : %d %d %d %d\n", headBuffer[0],headBuffer[1],headBuffer[2],headBuffer[3],headBuffer[4]);
          std::cout << dataBuffer<<std::endl;
@@ -85,7 +85,7 @@ namespace rr{
              //parse the response json
              if (reader.parse(ResponseJson, root)) {
                  status = root["success"].asString();
-                 
+
                  //just for debug
                  std::cout <<"status is "<<status<<std::endl;
 
@@ -144,8 +144,8 @@ namespace rr{
                      std::cout << action <<std::endl;
                  }
 
-                 if (action == "startVedio"){
-                    if (!services.streamerISStarted())
+                 if (action == "startVideo"){
+                    if (services.streamerISStarted())
                          //start the sendThread
                          std::cerr<<"streamer had been started!"<<std::endl;
                     else{
