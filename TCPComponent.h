@@ -41,7 +41,7 @@ namespace rr {
         std::mutex sendMutex;
         std::thread* receiveThread = nullptr;
         static std::thread* sendThread;
-        const char* serviceAdrress;
+        char* serviceAdrress;
 
     public:
         //thread-safe singleton
@@ -68,6 +68,9 @@ namespace rr {
 
         //reconnection server
         void reconnection();
+
+        //set server address
+        void setServerAddress(char* address);
 
     };
 }

@@ -8,6 +8,7 @@
 //
 
 #include <string>
+#include <string.h>
 #include <iomanip>
 #include <unistd.h>
 #include <stdio.h>
@@ -261,5 +262,10 @@ namespace rr{
 
          delete[] sendBuffer;
     }//end of sendRequest
+
+    void TCPComponent::setServerAddress(char* address){
+        strcpy(serviceAdrress,address);
+        std::cout<<"new server address: "<<address<<std::endl;
+    }
 
 }
