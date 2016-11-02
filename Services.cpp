@@ -3,7 +3,7 @@
 //  rescueRobot
 //
 //  Created by 黄正跃 on 23/09/2016.
-//  Last Modified by Wang han on 23/10/2016
+//  Last Modified by Wang han on 2/11/2016
 //  Copyright © 2016 黄正跃. All rights reserved.
 //
 
@@ -35,11 +35,7 @@ namespace rr{
     }
 
     void Services::startMovementHardware(){
-        // int MOTOR_LEFT_1=8;
-        // int MOTOR_LEFT_2=9;
-        // int MOTOR_RIGHT_1=7;
-        // int MOTOR_RIGHT_2=0;
-        //create an instance of car
+        this->hardwareState = true;
         this->car = rr::CarHardware::getInstance();
         this->car->start();
     }
@@ -59,10 +55,10 @@ namespace rr{
         return this->streamerState;
     }
 
-    void Services::move(float left,float right){
+    void Services::move(char* command){
         if (true == hardwareIsStarted()){
             this->car = rr::CarHardware::getInstance();
-            this->car->run(left,right);
+            this->car->run(command);
         }else{
             std::cerr<<"You should start hardware at first."<<std::endl;
         }

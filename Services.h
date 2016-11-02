@@ -46,7 +46,7 @@ namespace rr{
 
          bool streamerISStarted();
          
-         void move(float left,float right);
+         void move(char* command);
 
     };
 

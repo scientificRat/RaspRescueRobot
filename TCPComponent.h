@@ -33,6 +33,7 @@ namespace rr {
         //(this that is that this)
         static void receive(TCPComponent *that);
 
+        bool loginState;
         bool recieveThreadRun;
         sockaddr_in workingAddr;
         sockaddr_in serverAddr;
@@ -65,7 +66,8 @@ namespace rr {
         //login server
         void login();
 
-
+        //reconnection server
+        void reconnection();
 
     };
 }

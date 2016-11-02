@@ -5,6 +5,7 @@
 //  Created by Wang Han.SCU on 22/10/16.
 //  Copyright © 2016 robotcloud. SCU. All rights reserved.
 
+#include <string.h>
 #include "CarHardware.h"
 
 namespace rr{
@@ -13,26 +14,29 @@ namespace rr{
 
     std::mutex CarHardware::instanceMutex;
 
-    CarHardware::CarHardware(int motor_left_1,int motor_left_2,int motor_right_1,int motor_right_2)
-        :MOTOR_LEFT_1(motor_left_1),
-        MOTOR_LEFT_2(motor_left_2),
-        MOTOR_RIGHT_1(motor_right_1),
-        MOTOR_RIGHT_2(motor_right_2),
-        speed(1024),
-        carRun(false) {
-            wiringPiSetup();//initial all
-            softPwmCreate (MOTOR_LEFT_1, 0, 1024);
-            softPwmCreate (MOTOR_LEFT_2, 0, 1024);
-            softPwmCreate (MOTOR_RIGHT_1, 0, 1024);
-            softPwmCreate (MOTOR_RIGHT_2, 0, 1024);
+    CarHardware::CarHardware(char* device, int baud):
+        speed(1024),carRun(false) {
+
+            //initial all
+            if (wiringPiSetup() <0){
+                std::cerr<<"wiring pi setup error."<<std::endl;
+                exit(0);
+            }
+
+            if ((serialFd= serialOpen(device,baud)) <0){
+                std::cerr<<"serial open error."<<std::endl;
+                exit(0);
+            }else{
+                std::cout<<"serial has been opend."<<std::endl;
+            }
     }
 
     void CarHardware::start(){
         this->carRun = true;
     }
 
-    void CarHardware::run(float left,float right){
-        while (this->carRun){
+    void CarHardware::run(char* cmd){
+            /*
             int mLeft = (int) speed * left;
             int mRight = (int) speed * right;
             if (mLeft == 0 && mRight == 0 ){
@@ -60,13 +64,18 @@ namespace rr{
                 softPwmWrite (MOTOR_LEFT_2,0);
                 softPwmWrite (MOTOR_RIGHT_1,mRight);
                 softPwmWrite (MOTOR_RIGHT_2,0);
-            }
-        }
+            }*/
+
+         char* command = new char[2*sizeof(float)+1];
+         strncpy(command, cmd, 2*sizeof(float));
+         serialPuts (serialFd, command);
+         delete[] command;
     }
 
     //release car resources
     void CarHardware::release(){
         this->carRun = false;
+        serialClose(serialFd);
         delete this->car;
         this->car = nullptr;
     }

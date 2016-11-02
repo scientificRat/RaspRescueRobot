@@ -3,7 +3,7 @@
 //  rescueRobot
 //
 //  Created by 黄正跃 on 23/09/2016.
-//  Last Modified by Wang han on 23/10/2016
+//  Last Modified by Wang han on 2/11/2016
 //  Copyright © 2016 黄正跃. All rights reserved.
 //
 
@@ -21,8 +21,8 @@ namespace rr{
 
     //start VideoStramer
     void VideoStreamer::start() {
-        this->imageProcessUnit->start();
-        
+        this->isStop = false;
+        this->imageProcessUnit->start();     
         while (!this->isStop) {
             std::vector<uchar> &image = this->imageProcessUnit->getEncodeImage();
             sendVideoFrame(image);
@@ -40,12 +40,13 @@ namespace rr{
         char type = 'v';
         int length = static_cast<int>(imageData.size());
 
+/*
         //just for debug
          #ifdef DEBUG
          std::cout << "imageData length: " << length << std::endl;
          std::cout <<"In "<<__FILE__<<" , at "<<__LINE__<<" line."<<std::endl;
          #endif
-
+*/
 
         tcpComponent.sendMessage(&type, 1);
         tcpComponent.sendMessage(&length, 4);

@@ -13,6 +13,7 @@
 #include <exception>
 #include <iostream>
 #include <wiringPi.h>
+#include <wiringSerial.h>
 #include <softPwm.h>
 #include <mutex>
 /*
@@ -48,19 +49,16 @@
 namespace rr{
     class CarHardware{
         private:
-            //motor pins (connect to L298N)
-            int MOTOR_LEFT_1;
-            int MOTOR_LEFT_2;
-            int MOTOR_RIGHT_1;
-            int MOTOR_RIGHT_2;
+
             //single instance
             static CarHardware* car;
             const int speed;
+            int serialFd;
             bool carRun;
             //instance mutex
             static std::mutex instanceMutex;
             //private constructor
-            CarHardware(int motor_left_1,int motor_left_2,int motor_right_1,int motor_right_2);
+            CarHardware(char* device,int baud);
 
         public:
 
@@ -69,13 +67,7 @@ namespace rr{
                 if (nullptr == car){
                     instanceMutex.lock();
                     if (nullptr == car){
-                        /*
-                            MOTOR_LEFT_1=8;
-                            MOTOR_LEFT_2=9;
-                            MOTOR_RIGHT_1=7;
-                            MOTOR_RIGHT_2=0;
-                        */
-                        car = new CarHardware(8,9,7,0);
+                        car = new CarHardware("/dev/ttyAMA0",115200);
                     }
                     instanceMutex.unlock();
                 }
@@ -84,7 +76,7 @@ namespace rr{
 
             void start();
 
-            void run(float left,float right);
+            void run(char* command);
 
             //release car resources
             void release();

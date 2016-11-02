@@ -3,13 +3,15 @@
 //  rescueRobot
 //
 //  Created by 黄正跃 on 25/09/2016.
-//  Last Modified by Wang han on 28/10/2016
+//  Last Modified by Wang han on 2/11/2016
 //  Copyright © 2016 黄正跃. All rights reserved.
 //
 
 #include <string>
 #include <iomanip>
+#include <unistd.h>
 #include <stdio.h>
+
 #include "TCPComponent.h"
 #include "Services.h"
 #include "CarHardware.h"
@@ -21,7 +23,9 @@ namespace rr{
     std::thread* TCPComponent::sendThread = nullptr;
 
     TCPComponent::TCPComponent():
-    serviceAdrress("123.206.21.185"),recieveThreadRun(true) {
+    serviceAdrress("123.206.21.185"),
+    recieveThreadRun(true),
+    loginState(false) {
         //create tcp socket
         if(-1 == (sockfd = socket(AF_INET, SOCK_STREAM, 0))){
             std::cerr<<"socket initial failed\n";
@@ -77,7 +81,7 @@ namespace rr{
 
          //just for debug
          #ifdef DEBUG
-         printf("headBuffer : %d %d %d %d\n", headBuffer[0],headBuffer[1],headBuffer[2],headBuffer[3],headBuffer[4]);
+         printf("headBuffer : %d %d %d %d %d\n", headBuffer[0],headBuffer[1],headBuffer[2],headBuffer[3],headBuffer[4]);
          std::cout << dataBuffer<<std::endl;
          std::cout <<"In "<<__FILE__<<" at "<<__LINE__<<" line."<<std::endl;
          #endif
@@ -99,7 +103,8 @@ namespace rr{
              }
 
              if (status == "true"){
-                 //start the receiveThread
+                 this->loginState = true;
+                 //login success, then start the receiveThread
                  this->receiveThread = new std::thread(receive, this);
                  this->receiveThread->join();
 
@@ -113,6 +118,16 @@ namespace rr{
          std::cerr << "No ResponseJson "<<std::endl;
     }
 
+
+    //reconnection server
+    void TCPComponent::reconnection(){
+        while(!this->loginState) {
+            //wait 10s, then try again
+            sleep(10);
+            //try logining again
+            login();
+        }
+    }
 
     void TCPComponent::receive(TCPComponent *that) {
         Services& services = Services::getInstance();
@@ -128,19 +143,26 @@ namespace rr{
 
             //debug
             #ifndef DEBUG
-            std::cout << dataBuffer<<std::endl;
-            std::cout <<"In "<<__FILE__<<" at "<<__LINE__<<" line."<<std::endl;
+            printf("headBuffer : %d %d %d %d %d\n", headBuffer[0],headBuffer[1],headBuffer[2],headBuffer[3],headBuffer[4]);
+            std::cerr << dataBuffer<<std::endl;
+            std::cerr <<"In "<<__FILE__<<" at "<<__LINE__<<" line."<<std::endl;
             #endif
 
             if(headBuffer[0]=='c'){
                  float left=*((float*)dataBuffer);
                  float right=*((float*)dataBuffer+1);
+
+                 //debug
+                 //#ifndef DEBUG
+                 std::cerr << "left:"<< left <<"\tright: "<<right<<std::endl;
+                 std::cerr <<"In "<<__FILE__<<" at "<<__LINE__<<" line."<<std::endl;
+                 //#endif
                  if (services.hardwareIsStarted()){
-                     services.move(left,right);
+                     services.move(dataBuffer);
                  }
                  else{
                      services.startMovementHardware();
-                     services.move(left,right);
+                     services.move(dataBuffer);
                  }
             }
             else if(headBuffer[0]=='m'){
@@ -161,6 +183,9 @@ namespace rr{
                          sendThread = new std::thread(&Services::startVedioStreamer,&services);
                          std::cout<<"video streamer started!"<<std::endl;
                     }
+                }else if(action == "stopVideo") {
+                    services.stopVedioStreamer();
+                    std::cout<<"video streamer stoped!"<<std::endl;
                 }
 
                 //just for deubg
@@ -182,6 +207,7 @@ namespace rr{
     void TCPComponent::sendMessage(const void *data, int length) {
          this->sendMutex.lock();
          int writeState = -1;
+         int closeState = -1;
 
          if(this->sockfd <0 || data == nullptr || length < 0) {
             std::cerr <<"write params error."<<std::endl;
@@ -189,15 +215,31 @@ namespace rr{
          }
 
          writeState = write(this->sockfd,data,length);
-
+         //deal with write error
          if(writeState<=0)
          {
-            if(errno==EINTR) {
+            this->loginState = false;
+
+            if(errno == EINTR) {
+
                 std::cerr <<"server socket write error."<<std::endl;
+                //deal with close error
+                closeState = close(this->sockfd);
+
+                if (closeState < 0){
+                     if(errno == EBADF) {
+                         std::cerr<<"fd is not a valid socket."<<std::endl;
+                     }else if(errno == EIO) {
+                         std::cerr<<"IO error."<<std::endl;
+                     }else if (errno == EINTR) {
+                         std::cerr <<"socket is shutdown by interrupt signal."<<std::endl;
+                    }
+                }
+                 reconnection();
             }
             else if(errno == EPIPE) {
-                std::cerr <<"server socket had been closed."<<std::endl;
-                exit(0);
+                std::cerr <<"server socket had been closed. And try to connect again after 10 seconds"<<std::endl;
+                reconnection();
             }
          }
          this->sendMutex.unlock();
