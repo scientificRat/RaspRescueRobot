@@ -14,6 +14,8 @@
 #include "Services.h"
 #include "CarHardware.h"
 
+#define DEBUG
+
 namespace rr{
 
     std::thread* TCPComponent::sendThread = nullptr;
@@ -74,8 +76,11 @@ namespace rr{
          read(this->sockfd,dataBuffer,*((int*)(headBuffer+1)));
 
          //just for debug
+         #ifdef DEBUG
          printf("headBuffer : %d %d %d %d\n", headBuffer[0],headBuffer[1],headBuffer[2],headBuffer[3],headBuffer[4]);
          std::cout << dataBuffer<<std::endl;
+         std::cout <<"In "<<__FILE__<<" at "<<__LINE__<<" line."<<std::endl;
+         #endif
 
          if(headBuffer[0]=='m'){
              std::string status ="";
@@ -87,8 +92,10 @@ namespace rr{
                  status = root["success"].asString();
 
                  //just for debug
+                 #ifdef DEBUG
                  std::cout <<"status is "<<status<<std::endl;
-
+                 std::cout <<"In "<<__FILE__<<" at "<<__LINE__<<" line."<<std::endl;
+                 #endif
              }
 
              if (status == "true"){
@@ -120,7 +127,10 @@ namespace rr{
             // (注意：服务器返回的消息type='m' 内容为json, 控制端发送的消息type ='c'表示命令)
 
             //debug
+            #ifndef DEBUG
             std::cout << dataBuffer<<std::endl;
+            std::cout <<"In "<<__FILE__<<" at "<<__LINE__<<" line."<<std::endl;
+            #endif
 
             if(headBuffer[0]=='c'){
                  float left=*((float*)dataBuffer);
@@ -138,13 +148,12 @@ namespace rr{
                  std::string ResponseJson = std::string(dataBuffer);
                  Json::Reader reader;
                  Json::Value root;
-                 if (reader.parse(ResponseJson, root))
-                 {
+                 if (reader.parse(ResponseJson, root)) {
                      action = root["action"].asString();
-                     std::cout << action <<std::endl;
+                     
                  }
 
-                 if (action == "startVideo"){
+                 if (action == "startVideo") {
                     if (services.streamerISStarted())
                          //start the sendThread
                          std::cerr<<"streamer had been started!"<<std::endl;
@@ -155,7 +164,10 @@ namespace rr{
                 }
 
                 //just for deubg
-                std::cerr<<"ResponseJson: "<<ResponseJson<<std::endl;
+                 #ifdef DEBUG
+                 std::cout<<"ResponseJson: "<<ResponseJson<<std::endl;
+                 std::cout <<"In "<<__FILE__<<" , at "<<__LINE__<<" line."<<std::endl;
+                 #endif
             }
             else {
                  std::cout << "ResponseJson error" << std::endl;

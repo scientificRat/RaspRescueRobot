@@ -10,6 +10,7 @@
 #include "VideoStreamer.h"
 
 
+#define DEBUG
 namespace rr{
 
     //constructor
@@ -40,7 +41,11 @@ namespace rr{
         int length = static_cast<int>(imageData.size());
 
         //just for debug
-        std::cout << "imageData length: " << length << std::endl;
+         #ifdef DEBUG
+         std::cout << "imageData length: " << length << std::endl;
+         std::cout <<"In "<<__FILE__<<" , at "<<__LINE__<<" line."<<std::endl;
+         #endif
+
 
         tcpComponent.sendMessage(&type, 1);
         tcpComponent.sendMessage(&length, 4);
