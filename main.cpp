@@ -13,9 +13,10 @@
 #include <stdio.h>
 
 #include "Services.h"
-#include "TCPComponent.h"
+//#include "TCPComponent.h"
 
 int main(int argc, char* argv[]) {
+    /*
      int opt;  
      rr::TCPComponent& tcp =  rr::TCPComponent::getInstance();
      const char* optString= "t:";
@@ -33,7 +34,7 @@ int main(int argc, char* argv[]) {
          opt == getopt(argc,argv,optString);
     }
 
-
+    */
      rr::Services& services = rr::Services::getInstance();
      services.startConnection();    
      return 0;

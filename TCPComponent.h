@@ -21,6 +21,7 @@
 #include <unistd.h>
 #include <strings.h>
 #include <mutex>
+#include <string>
 #include <errno.h>
 
 #include "dist/json/json.h"
@@ -37,11 +38,14 @@ namespace rr {
         bool recieveThreadRun;
         sockaddr_in workingAddr;
         sockaddr_in serverAddr;
-        int sockfd = -1;
+        int sockfd;
         std::mutex sendMutex;
-        std::thread* receiveThread = nullptr;
+        std::thread* receiveThread;
         static std::thread* sendThread;
+
+        //server params
         char* serviceAdrress;
+        int servicePort;
 
     public:
         //thread-safe singleton
@@ -69,9 +73,10 @@ namespace rr {
         //reconnection server
         void reconnection();
 
+        /*
         //set server address
-        void setServerAddress(char* address);
-
+        static void setServerAddress(char* address);
+        */
     };
 }
 

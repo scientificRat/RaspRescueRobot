@@ -24,9 +24,12 @@ namespace rr{
     std::thread* TCPComponent::sendThread = nullptr;
 
     TCPComponent::TCPComponent():
-    serviceAdrress("123.206.21.185"),
     recieveThreadRun(true),
-    loginState(false) {
+    serviceAdrress("123.206.21.185"),
+    servicePort(8902),
+    loginState(false),
+    receiveThread(nullptr),
+    sockfd(-1) {
         //create tcp socket
         if(-1 == (sockfd = socket(AF_INET, SOCK_STREAM, 0))){
             std::cerr<<"socket initial failed\n";
@@ -45,7 +48,7 @@ namespace rr{
         //set the address of the remote server
         bzero(&serverAddr, sizeof(sockaddr_in));
         serverAddr.sin_family=AF_INET;
-        serverAddr.sin_port=htons(8902);
+        serverAddr.sin_port=htons(servicePort);
         serverAddr.sin_addr.s_addr = inet_addr(serviceAdrress);
         //connect
         if(-1 == connect(sockfd, (sockaddr*)&serverAddr, sizeof(serverAddr))){
@@ -263,9 +266,11 @@ namespace rr{
          delete[] sendBuffer;
     }//end of sendRequest
 
-    void TCPComponent::setServerAddress(char* address){
-        strcpy(serviceAdrress,address);
+    /*
+    static void TCPComponent::setServerAddress(char* address){
+        serviceAdrress = std::string(address);
         std::cout<<"new server address: "<<address<<std::endl;
     }
+    */
 
 }
