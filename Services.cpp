@@ -55,6 +55,14 @@ namespace rr{
         return this->streamerState;
     }
 
+    int Services::getImageProperty (int propId) {
+         return videoStreamer->getImageProperty(propId);
+    }
+
+    bool Services::setImageProperty (int propId,int value) {
+         return videoStreamer->setImageProperty(propId,value);
+    }
+    
     void Services::move(char* command){
         if (true == hardwareIsStarted()){
             this->car = rr::CarHardware::getInstance();

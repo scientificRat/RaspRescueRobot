@@ -7,8 +7,9 @@
 //  Copyright © 2016 黄正跃. All rights reserved.
 //
 
-#include "VideoStreamer.h"
+#include <sys/time.h>
 
+#include "VideoStreamer.h"
 
 #define DEBUG
 namespace rr{
@@ -21,18 +22,26 @@ namespace rr{
 
     //start VideoStramer
     void VideoStreamer::start() {
-        this->isStop = false;
-        this->imageProcessUnit->start();     
-        while (!this->isStop) {
-            std::vector<uchar> &image = this->imageProcessUnit->getEncodeImage();
-            sendVideoFrame(image);
-        }
-        this->imageProcessUnit->stop();
+         this->isStop = false;
+         this->imageProcessUnit->start(); 
+         while (!this->isStop) {
+             std::vector<uchar> &image = this->imageProcessUnit->getEncodeImage();
+             sendVideoFrame(image);
+         }
+         this->imageProcessUnit->stop();
 
     }
 
     void VideoStreamer::stop() {
-        this->isStop = true;
+         this->isStop = true;
+    }
+
+    int VideoStreamer::getImageProperty (int propId) {
+         return imageProcessUnit->getImageProperty(propId);
+    }
+
+    bool VideoStreamer::setImageProperty (int propId,int value) {
+         return imageProcessUnit->setImageProperty(propId,value);
     }
 
     void VideoStreamer::sendVideoFrame(std::vector<uchar> &imageData) {

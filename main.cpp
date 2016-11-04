@@ -27,15 +27,15 @@ int main(int argc, char** argv) {
          switch(opt) {
              case 'a':
                  strncpy(serverAddress,optarg,15);
-                 std::cout<<serverAddress<<std::endl;
+                 std::cout<<"serverAddress : "<<serverAddress <<std::endl;
                  break;          
              case 'p':
                  serverPort = atoi(optarg);
-                 std::cout<<serverPort<<std::endl;
+                 std::cout<<"serverPort : "<<serverPort<<std::endl;
                  break; 
              case 'P':
                  workingPort = atoi(optarg);
-                 std::cout<<workingPort<<std::endl;
+                 std::cout<<"workingPort : "<<workingPort<<std::endl;
                  break; 
              default:
                  std::cerr<<"Usage :"<< argv[0]<<" [- a serverAddress] [-p serverPort] [-P workingPort]"<<std::endl;

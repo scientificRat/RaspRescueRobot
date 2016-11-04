@@ -48,6 +48,10 @@ namespace rr{
          
          void move(char* command);
 
+         int getImageProperty (int propId);
+
+         bool setImageProperty (int propId,int value);
+
     };
 
 }

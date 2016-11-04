@@ -47,6 +47,16 @@ namespace rr {
         */
         std::vector <uchar> &getEncodeImage();
 
+         /*
+         * Get image property
+         */
+        int getImageProperty (int propId);
+
+         /*
+         * Set image property
+         */
+        bool setImageProperty (int propId,int value);
+
     private:
         ImageCaptureUnit *mImageCaptureUnit;
 

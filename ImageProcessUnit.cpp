@@ -56,7 +56,57 @@ namespace rr{
      }
      
      
-     void ImageProcessUnit::processImage(cv::Mat& mImage){
-         //empty
-     }
+    void ImageProcessUnit::processImage(cv::Mat& mImage){
+    //empty
+    }
+
+     /*
+     * Get image property
+     */
+    int ImageProcessUnit::getImageProperty (int propId) {
+
+        switch ( propId ) {
+            case CV_CAP_PROP_FRAME_HEIGHT :
+                return mImageCaptureUnit->getImageHeight();
+            case CV_CAP_PROP_FRAME_WIDTH :
+                return mImageCaptureUnit->getImageWidth();
+            case CV_CAP_PROP_FPS:
+                return 30;
+            case CV_CAP_PROP_BRIGHTNESS :
+                return mImageCaptureUnit->getImageBrightness();
+            case CV_CAP_PROP_CONTRAST :
+                return mImageCaptureUnit->getImageContrast(); 
+            case CV_CAP_PROP_SATURATION :
+                return mImageCaptureUnit->getImageContrast(); 
+            default :
+                return -1;
+        }
+    }
+
+     /*
+     * Set image property
+     */
+    bool ImageProcessUnit::setImageProperty (int propId,int value) {
+
+        switch ( propId ) {
+            case CV_CAP_PROP_FRAME_HEIGHT :
+                 mImageCaptureUnit->setImageHeight(value);
+                 break;
+            case CV_CAP_PROP_FRAME_WIDTH :
+                 mImageCaptureUnit->setImageWidth(value);
+                 break;
+            case CV_CAP_PROP_BRIGHTNESS :
+                 mImageCaptureUnit->setImageBrightness(value);
+                 break;
+            case CV_CAP_PROP_CONTRAST :
+                 mImageCaptureUnit->setImageContrast(value);
+                 break; 
+            case CV_CAP_PROP_SATURATION :
+                 mImageCaptureUnit->setImageContrast(value);
+                 break; 
+            default :
+                return false;
+        }
+        return true;
+    }
 }

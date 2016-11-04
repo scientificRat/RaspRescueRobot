@@ -20,22 +20,26 @@
 namespace rr {
     class VideoStreamer {
     private:
-        ImageProcessUnit* imageProcessUnit = nullptr;
-        bool isStop;
+         ImageProcessUnit* imageProcessUnit = nullptr;
+         bool isStop;
     public:
         
-        VideoStreamer();     
+         VideoStreamer();     
            
-        void start();
+         void start();
 
-        void stop();
+         void stop();
 
-        void setConstract();
+         void setConstract();
 
-        bool isStarted();
+         bool isStarted();
+
+         int getImageProperty (int propId);
+
+         bool setImageProperty (int propId,int value);
 
     private:
-        void sendVideoFrame(std::vector<uchar> &imageData);
+         void sendVideoFrame(std::vector<uchar> &imageData);
 
     };
 }
