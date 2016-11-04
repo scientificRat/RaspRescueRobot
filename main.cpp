@@ -2,39 +2,55 @@
 //  main.cpp
 //  rescueRobot
 //
-//  Created by 黄正跃 on 9/15/16.
+//  Created by Wang Han on 9/15/16.
 //  Last Modified by Wang Han on 11/2/2016
-//  Copyright © 2016 黄正跃. All rights reserved.
+//  Copyright (C) 2016 Wang Han. All rights reserved.
 //
 
 #include <iostream>
 #include <unistd.h>
 #include <stdlib.h>
-#include <stdio.h>
+#include <string.h>
 
 #include "Services.h"
-//#include "TCPComponent.h"
+#include "TCPComponent.h"
 
-int main(int argc, char* argv[]) {
-    /*
-     int opt;  
-     rr::TCPComponent& tcp =  rr::TCPComponent::getInstance();
-     const char* optString= "t:";
-     
-     opt = getopt(argc, argv, optString);
-     while( opt!= -1){
+int main(int argc, char** argv) {
+    
+     char serverAddress[16] = "123.206.21.185";
+     int serverPort = 8902;
+     int workingPort = 8900;
+  
+     const char* optString= "a:p:P:";
+     int opt = getopt(argc,argv,optString);
+     while(opt!= -1){
          switch(opt) {
-             case 't':
-                 tcp.setServerAddress(optarg);
+             case 'a':
+                 strncpy(serverAddress,optarg,15);
+                 std::cout<<serverAddress<<std::endl;
                  break;          
+             case 'p':
+                 serverPort = atoi(optarg);
+                 std::cout<<serverPort<<std::endl;
+                 break; 
+             case 'P':
+                 workingPort = atoi(optarg);
+                 std::cout<<workingPort<<std::endl;
+                 break; 
              default:
-                 std::cout<<"error params."<<std::endl;
-                 break;
+                 std::cerr<<"Usage :"<< argv[0]<<" [- a serverAddress] [-p serverPort] [-P workingPort]"<<std::endl;
+                 exit(EXIT_FAILURE);
          }
-         opt == getopt(argc,argv,optString);
+         opt = getopt(argc,argv,optString);
     }
 
-    */
+    if (optind > argc) {
+        std::cerr << "Expected argument after options"<<std::endl;
+        exit(EXIT_FAILURE);
+    }
+     //std::cout<<optind<<argc<<std::endl;
+     rr::TCPComponent& tcp =  rr::TCPComponent::create(serverAddress,serverPort,workingPort);
+    
      rr::Services& services = rr::Services::getInstance();
      services.startConnection();    
      return 0;

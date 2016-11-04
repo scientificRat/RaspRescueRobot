@@ -30,7 +30,7 @@ namespace rr{
     }
 
     void Services::startConnection(){
-         TCPComponent& tcpComponent =  rr::TCPComponent::getInstance();
+         TCPComponent& tcpComponent = rr::TCPComponent::getInstance();
          tcpComponent.login();
     }
 

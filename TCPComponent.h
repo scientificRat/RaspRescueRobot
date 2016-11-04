@@ -23,6 +23,7 @@
 #include <mutex>
 #include <string>
 #include <errno.h>
+#include <string>
 
 #include "dist/json/json.h"
 
@@ -30,9 +31,14 @@ namespace rr {
 
     class TCPComponent {
     private:
-        TCPComponent();
-        //(this that is that this)
+
+        //static instance
+        static TCPComponent* tcpComponent;
+        TCPComponent(char* serviceAdrress,int servicePort,int workingPort);
+
         static void receive(TCPComponent *that);
+        //get login name and password
+        void getLoginInfo();
 
         bool loginState;
         bool recieveThreadRun;
@@ -43,18 +49,28 @@ namespace rr {
         std::thread* receiveThread;
         static std::thread* sendThread;
 
-        //server params
-        char* serviceAdrress;
-        int servicePort;
+        std::string loginName;
+        std::string password;
 
     public:
-        //thread-safe singleton
-        static TCPComponent &getInstance() {
-            static TCPComponent instance;
-            if (instance.sockfd < 0) {
-                throw std::runtime_error("socket initial failed");
+
+        static TCPComponent& create(char* serviceAdrress = "123.206.21.185",
+            int servicePort=8902,int workingPort = 8900){
+            if (nullptr == tcpComponent) {
+                tcpComponent = new TCPComponent(serviceAdrress,servicePort,workingPort);
             }
-            return instance;
+            if (tcpComponent->sockfd < 0) {
+                throw std::runtime_error("Socket initial failed!");
+            } 
+            return *tcpComponent;
+        }
+
+        //get singleton
+        static TCPComponent &getInstance() {
+            if (nullptr == tcpComponent) {
+                throw std::runtime_error("TCPComponent not created!");
+            }
+            return *tcpComponent;
         }
 
         //delete these two dangerous function
@@ -73,10 +89,6 @@ namespace rr {
         //reconnection server
         void reconnection();
 
-        /*
-        //set server address
-        static void setServerAddress(char* address);
-        */
     };
 }
 

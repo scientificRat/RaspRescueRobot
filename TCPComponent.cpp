@@ -12,6 +12,7 @@
 #include <iomanip>
 #include <unistd.h>
 #include <stdio.h>
+#include <fstream>
 
 #include "TCPComponent.h"
 #include "Services.h"
@@ -21,15 +22,23 @@
 
 namespace rr{
 
+    TCPComponent* TCPComponent::tcpComponent;
+
     std::thread* TCPComponent::sendThread = nullptr;
 
-    TCPComponent::TCPComponent():
+    //std::string loginName = "";
+    //std::string password = "";
+
+    TCPComponent::TCPComponent(char* serviceAdrress,int servicePort,int workingPort):
     recieveThreadRun(true),
-    serviceAdrress("123.206.21.185"),
-    servicePort(8902),
     loginState(false),
     receiveThread(nullptr),
     sockfd(-1) {
+
+
+         //get login data
+         getLoginInfo();
+
         //create tcp socket
         if(-1 == (sockfd = socket(AF_INET, SOCK_STREAM, 0))){
             std::cerr<<"socket initial failed\n";
@@ -37,7 +46,7 @@ namespace rr{
         //set the addr of the local socket
         bzero(&workingAddr, sizeof(sockaddr_in));
         workingAddr.sin_family=AF_INET;
-        workingAddr.sin_port=htons(8900);
+        workingAddr.sin_port=htons(workingPort);
         workingAddr.sin_addr.s_addr = htonl (INADDR_ANY);
         //bind
         if(-1 == (bind(sockfd, (sockaddr *)&workingAddr, sizeof(workingAddr)))){
@@ -58,13 +67,38 @@ namespace rr{
         }
     }
 
+    void TCPComponent::getLoginInfo(){
+         Json::Value fileRoot;
+         Json::Reader fileReader;
+         std::ifstream loginData;
+
+         loginData.open("../.loginJson");
+         if (!loginData) {
+            throw std::runtime_error("login json doesn't exist!");
+         }
+
+         if (fileReader.parse(loginData,fileRoot)){
+             loginName = fileRoot["loginName"].asString();
+             password = fileRoot["password"].asString();
+         }
+
+         #ifdef DEBUG
+         std::cout << "loginName : "<<loginName<<std::endl;
+         std::cout << "password : "<<password<<std::endl;
+         std::cout <<"In "<<__FILE__<<" at "<<__LINE__<<" line."<<std::endl;
+         #endif
+
+         loginData.close();
+    }
+
     void TCPComponent::login(){
      //create json data
+
          Json::Value root;
          Json::FastWriter writer;
          root["requestType"] = Json::Value("login");
-         root["loginName"] = Json::Value("caesar");
-         root["password"] = Json::Value("123456");
+         root["loginName"] = Json::Value(loginName);
+         root["password"] = Json::Value(password);
          std::string RequestJson = writer.write(root); //include '\n'
 
          //just for debug
@@ -266,11 +300,5 @@ namespace rr{
          delete[] sendBuffer;
     }//end of sendRequest
 
-    /*
-    static void TCPComponent::setServerAddress(char* address){
-        serviceAdrress = std::string(address);
-        std::cout<<"new server address: "<<address<<std::endl;
-    }
-    */
 
 }
