@@ -208,7 +208,11 @@ namespace rr{
                  std::string ResponseJson = std::string(dataBuffer);
                  Json::Reader reader;
                  Json::Value root;
-                 int value = 0;
+                 int height = 0;
+                 int width = 0;
+                 int brightness = 0;
+                 int contrast = 0;
+                 int saturation = 0;
                  if (reader.parse(ResponseJson, root)) {
                      action = root["action"].asString();
                      
@@ -225,48 +229,37 @@ namespace rr{
                 }else if(action == "stopVideo") {
                     services.stopVedioStreamer();
                     std::cout<<"video streamer stoped!"<<std::endl;
-                }else if (action == "setHeight") {
+                }else if (action == "configure") {
                      if (reader.parse(ResponseJson, root)) {
-                         value = root["value"].asInt();
-                     }
-                     if (value != services.getImageProperty(CV_CAP_PROP_FRAME_HEIGHT)) {
-                         services.setImageProperty(CV_CAP_PROP_FRAME_HEIGHT,value);
-                     }
-                     std::cout <<"set image height as : " << value << std::endl; 
-                }else if (action == "setWidth") {
-                     if (reader.parse(ResponseJson, root)) {
-                         value = root["value"].asInt();
-                     }
-                     if (value != services.getImageProperty(CV_CAP_PROP_FRAME_WIDTH)) {
-                         services.setImageProperty(CV_CAP_PROP_FRAME_WIDTH,value);
-                     }
-                     std::cout <<"set image weight as : " << value << std::endl; 
-                }else if (action == "setBirhtness") {
-                     if (reader.parse(ResponseJson, root)) {
-                         value = root["value"].asInt();
-                     }
-                     if (value != services.getImageProperty(CV_CAP_PROP_BRIGHTNESS)) {
-                         services.setImageProperty(CV_CAP_PROP_BRIGHTNESS,value);
-                     }
-                     std::cout <<"set image birhtness as : " << value << std::endl; 
-                }else if (action == "setContrast") {
-                     if (reader.parse(ResponseJson, root)) {
-                         value = root["value"].asInt();
-                     }
-                     if (value != services.getImageProperty(CV_CAP_PROP_CONTRAST)) {
-                         services.setImageProperty(CV_CAP_PROP_CONTRAST,value);
-                     }
-                     std::cout <<"set image contrast as : " << value << std::endl; 
-                }else if (action == "setSaturation") {
-                     if (reader.parse(ResponseJson, root)) {
-                         value = root["value"].asInt();
-                     }
-                     if (value != services.getImageProperty(CV_CAP_PROP_SATURATION)) {
-                         services.setImageProperty(CV_CAP_PROP_SATURATION,value);
-                     }
-                     std::cout <<"set image saturation as : " << value << std::endl; 
-                }
+                         height = root["height"].asInt();
+                         width = root["width"].asInt();
+                         brightness = root["brightness"].asInt();
+                         contrast = root["contrast"].asInt();
+                         saturation = root["saturation"].asInt();
 
+                     }
+                     // if (height != services.getImageProperty(CV_CAP_PROP_FRAME_HEIGHT)) {
+                     //     services.setImageProperty(CV_CAP_PROP_FRAME_HEIGHT,height);
+                     // }
+                     // if (width != services.getImageProperty(CV_CAP_PROP_FRAME_WIDTH)) {
+                     //     services.setImageProperty(CV_CAP_PROP_FRAME_WIDTH,width);
+                     // }
+                     if (brightness != services.getImageProperty(CV_CAP_PROP_BRIGHTNESS)) {
+                         services.setImageProperty(CV_CAP_PROP_BRIGHTNESS,brightness);
+                     }
+                     if (contrast != services.getImageProperty(CV_CAP_PROP_CONTRAST)) {
+                         services.setImageProperty(CV_CAP_PROP_CONTRAST,contrast);
+                     }
+                     if (saturation != services.getImageProperty(CV_CAP_PROP_SATURATION)) {
+                         services.setImageProperty(CV_CAP_PROP_SATURATION,saturation);
+                     }
+                     //set height and width is dangerous
+                     //std::cout <<"set image height as : " << height << std::endl; 
+                     //std::cout <<"set image width as : " << width << std::endl; 
+                     std::cout <<"set image birhtness as : " << birhtness << std::endl; 
+                     std::cout <<"set image contrast as : " << contrast << std::endl; 
+                     std::cout <<"set image saturation as : " << saturation << std::endl; 
+                }
                 //just for deubg
                  #ifdef DEBUG
                  std::cout<<"ResponseJson: "<<ResponseJson<<std::endl;
