@@ -52,7 +52,8 @@ namespace rr{
         if(-1 == (bind(sockfd, (sockaddr *)&workingAddr, sizeof(workingAddr)))){
             close(sockfd);
             sockfd = -2;
-            std::cerr<<"socket bind failed\n";
+            throw std::runtime_error("socket bind failed!");
+            //std::cerr<<"socket bind failed\n";
         }
         //set the address of the remote server
         bzero(&serverAddr, sizeof(sockaddr_in));
@@ -61,9 +62,10 @@ namespace rr{
         serverAddr.sin_addr.s_addr = inet_addr(serviceAdrress);
         //connect
         if(-1 == connect(sockfd, (sockaddr*)&serverAddr, sizeof(serverAddr))){
-            close(sockfd);
-            sockfd = -3;
-            std::cerr<<"socket connect failed\n";
+            //close(sockfd);
+            //sockfd = -3;
+            std::cerr<<"socket connect failed"<<std::endl;
+            reconnection();
         }
     }
 
@@ -159,11 +161,21 @@ namespace rr{
 
     //reconnection server
     void TCPComponent::reconnection(){
+        int connectState = -1;
         while(!this->loginState) {
             //wait 10s, then try again
             sleep(10);
+
+            connectState = connect(sockfd, (sockaddr*)&serverAddr, sizeof(serverAddr));
+            if(connectState != -1){
+                std::cout<<"socket connect successed."<<std::endl;
+            }else{
+                std::cerr<<"socket connect failed, after 10s try to connect again."<<std::endl;
+            }
             //try logining again
-            login();
+            if (connectState != -1) {
+                login();
+            } 
         }
     }
 
@@ -256,7 +268,7 @@ namespace rr{
                      //set height and width is dangerous
                      //std::cout <<"set image height as : " << height << std::endl; 
                      //std::cout <<"set image width as : " << width << std::endl; 
-                     std::cout <<"set image birhtness as : " << birhtness << std::endl; 
+                     std::cout <<"set image brightness as : " << brightness << std::endl; 
                      std::cout <<"set image contrast as : " << contrast << std::endl; 
                      std::cout <<"set image saturation as : " << saturation << std::endl; 
                 }
