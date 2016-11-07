@@ -7,16 +7,36 @@
 //  Copyright © 2016 黄正跃. All rights reserved.
 //
 
+#include <iostream>
+#include <thread>
+#include <string>
+#include <cstdlib>
+
 #include "Services.h"
-#include "CarHardware.h"
 
 namespace rr{
 
 	//constructor
 	Services::Services():
     hardwareState(false),
-    streamerState(false){
+    streamerState(false),
+    connectionState(false){
          videoStreamer = new VideoStreamer();
+         this->stopThread = new std::thread(stopService, this);
+    }
+    void Services::stopService(Services* that){
+        std::string cmd;
+        while(true){
+            std::cin >> cmd;
+            if (cmd == "QUIT") {
+                that->stopVedioStreamer();
+                that->stopMovementHardware();
+                that->stopConnection();
+                break;
+            } 
+        }
+        //stop service
+        exit(0);
     }
 
     void Services::startVedioStreamer(){
@@ -30,8 +50,15 @@ namespace rr{
     }
 
     void Services::startConnection(){
+         this->connectionState = true;
          TCPComponent& tcpComponent = rr::TCPComponent::getInstance();
          tcpComponent.login();
+    }
+
+    void Services::stopConnection(){
+         this->connectionState = false;
+        TCPComponent& tcpComponent = rr::TCPComponent::getInstance();
+         tcpComponent.stopConnection();
     }
 
     void Services::startMovementHardware(){
@@ -70,5 +97,9 @@ namespace rr{
         }else{
             std::cerr<<"You should start hardware at first."<<std::endl;
         }
+    }
+
+    void Services::setDelayTime(long delayTime){
+         videoStreamer->setDelayTime(delayTime);
     }
 }

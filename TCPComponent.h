@@ -34,7 +34,7 @@ namespace rr {
 
         //static instance
         static TCPComponent* tcpComponent;
-        TCPComponent(char* serviceAdrress,int servicePort,int workingPort);
+        TCPComponent(const char* serviceAdrress,const int servicePort,const int workingPort);
 
         static void receive(TCPComponent *that);
         //get login name and password
@@ -54,8 +54,8 @@ namespace rr {
 
     public:
 
-        static TCPComponent& create(char* serviceAdrress = "123.206.21.185",
-            int servicePort=8902,int workingPort = 8900){
+        static TCPComponent& create(const char* serviceAdrress = "123.206.21.185",
+            const int servicePort=8902,const int workingPort = 8900){
             if (nullptr == tcpComponent) {
                 tcpComponent = new TCPComponent(serviceAdrress,servicePort,workingPort);
             }
@@ -88,6 +88,8 @@ namespace rr {
 
         //reconnection server
         void reconnection();
+
+        void stopConnection();
 
     };
 }

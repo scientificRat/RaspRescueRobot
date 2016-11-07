@@ -12,6 +12,8 @@
 #include <iomanip>
 #include <unistd.h>
 #include <stdio.h>
+#include <sys/types.h>
+#include <sys/socket.h>
 #include <fstream>
 
 #include "TCPComponent.h"
@@ -29,7 +31,7 @@ namespace rr{
     //std::string loginName = "";
     //std::string password = "";
 
-    TCPComponent::TCPComponent(char* serviceAdrress,int servicePort,int workingPort):
+    TCPComponent::TCPComponent(const char* serviceAdrress,const int servicePort,const int workingPort):
     recieveThreadRun(true),
     loginState(false),
     receiveThread(nullptr),
@@ -43,6 +45,13 @@ namespace rr{
         if(-1 == (sockfd = socket(AF_INET, SOCK_STREAM, 0))){
             std::cerr<<"socket initial failed\n";
         }
+        
+        //close TIME_WAIT state
+        int option = 1; 
+        if ( setsockopt ( sockfd, SOL_SOCKET, SO_REUSEADDR, &option, sizeof( option ) ) < 0 ) { 
+            throw std::runtime_error("set socket option failed!");
+        } 
+
         //set the addr of the local socket
         bzero(&workingAddr, sizeof(sockaddr_in));
         workingAddr.sin_family=AF_INET;
@@ -177,6 +186,12 @@ namespace rr{
                 login();
             } 
         }
+    }
+
+    //stop connection
+    void TCPComponent::stopConnection(){
+        close(sockfd);
+        std::cout <<"socket has been closed."<<std::endl;
     }
 
     void TCPComponent::receive(TCPComponent *that) {

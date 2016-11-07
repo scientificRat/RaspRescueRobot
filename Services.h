@@ -16,26 +16,32 @@
 namespace rr{
      class Services {
      private:
+         Services();
+         
+         Services(const Services&)   = delete;
+         Services& operator=(const Services&)  = delete;
+         
          VideoStreamer *videoStreamer = nullptr;
          CarHardware* car = nullptr;
          bool hardwareState;
          bool streamerState;
+         bool connectionState;
+
+         std::thread* stopThread = nullptr;  
+         static void stopService(Services* that);
      public:
          static Services& getInstance(){
 			static Services services;
 			return services;
 		}
         
-         Services();
-        
-         Services(const Services&)   = delete;
-         Services& operator=(const Services&)  = delete;
-        
          void startVedioStreamer();
 
          void stopVedioStreamer();
         
          void startConnection();
+
+         void stopConnection();
         
          void startMovementHardware();
 
@@ -51,6 +57,8 @@ namespace rr{
          int getImageProperty (int propId);
 
          bool setImageProperty (int propId,int value);
+
+         void setDelayTime(long delayTime);
 
     };
 

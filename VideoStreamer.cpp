@@ -3,7 +3,7 @@
 //  rescueRobot
 //
 //  Created by 黄正跃 on 23/09/2016.
-//  Last Modified by Wang han on 2/11/2016
+//  Last Modified by Wang han on 7/11/2016
 //  Copyright © 2016 黄正跃. All rights reserved.
 //
 
@@ -16,7 +16,8 @@ namespace rr{
 
     //constructor
     VideoStreamer::VideoStreamer()
-    :isStop(false) {
+    :isStop(false),
+    delayTime(50000) {
         imageProcessUnit = new ImageProcessUnit();
     }
 
@@ -27,6 +28,8 @@ namespace rr{
          while (!this->isStop) {
              std::vector<uchar> &image = this->imageProcessUnit->getEncodeImage();
              sendVideoFrame(image);
+             //avoid TCP flow control
+             usleep(this->delayTime);
          }
          this->imageProcessUnit->stop();
 
@@ -42,6 +45,10 @@ namespace rr{
 
     bool VideoStreamer::setImageProperty (int propId,int value) {
          return imageProcessUnit->setImageProperty(propId,value);
+    }
+
+    void VideoStreamer::setDelayTime(long delayTime){
+        this->delayTime = delayTime;
     }
 
     void VideoStreamer::sendVideoFrame(std::vector<uchar> &imageData) {

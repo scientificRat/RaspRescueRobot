@@ -20,8 +20,9 @@ int main(int argc, char** argv) {
      char serverAddress[16] = "123.206.21.185";
      int serverPort = 8902;
      int workingPort = 8900;
+     long delayTime = 50000;
   
-     const char* optString= "a:p:P:";
+     const char* optString= "a:p:P:t:";
      int opt = getopt(argc,argv,optString);
      while(opt!= -1){
          switch(opt) {
@@ -37,8 +38,12 @@ int main(int argc, char** argv) {
                  workingPort = atoi(optarg);
                  std::cout<<"workingPort : "<<workingPort<<std::endl;
                  break; 
+             case 't':
+                 delayTime = atol(optarg);
+                 std::cout<<"delayTime : "<<delayTime<<std::endl;
+                 break;
              default:
-                 std::cerr<<"Usage :"<< argv[0]<<" [- a serverAddress] [-p serverPort] [-P workingPort]"<<std::endl;
+                 std::cerr<<"Usage :"<< argv[0]<<" [- a serverAddress] [-p serverPort] [-P workingPort] [-t delayTime]"<<std::endl;
                  exit(EXIT_FAILURE);
          }
          opt = getopt(argc,argv,optString);
@@ -52,6 +57,7 @@ int main(int argc, char** argv) {
      rr::TCPComponent& tcp =  rr::TCPComponent::create(serverAddress,serverPort,workingPort);
     
      rr::Services& services = rr::Services::getInstance();
+     services.setDelayTime(delayTime);
      services.startConnection();    
      return 0;
 }

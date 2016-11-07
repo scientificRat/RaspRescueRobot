@@ -58,7 +58,7 @@ namespace rr{
             //instance mutex
             static std::mutex instanceMutex;
             //private constructor
-            CarHardware(char* device,int baud);
+            CarHardware(const char* device,int baud);
 
         public:
 

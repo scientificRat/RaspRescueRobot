@@ -14,7 +14,7 @@ namespace rr{
 
     std::mutex CarHardware::instanceMutex;
 
-    CarHardware::CarHardware(char* device, int baud):
+    CarHardware::CarHardware(const char* device, int baud):
         speed(1024),carRun(false) {
 
             //initial all

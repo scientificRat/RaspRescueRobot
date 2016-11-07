@@ -11,7 +11,7 @@
 #ifndef RASPBERRY_ROBOT_VIDEOSTREAMER__
 #define RASPBERRY_ROBOT_VIDEOSTREAMER__
 
-
+#include <unistd.h>
 #include <vector>
 
 #include "TCPComponent.h"
@@ -22,6 +22,7 @@ namespace rr {
     private:
          ImageProcessUnit* imageProcessUnit = nullptr;
          bool isStop;
+         long delayTime; //microsecond intervals
     public:
         
          VideoStreamer();     
@@ -37,6 +38,8 @@ namespace rr {
          int getImageProperty (int propId);
 
          bool setImageProperty (int propId,int value);
+
+         void setDelayTime(long delayTime);
 
     private:
          void sendVideoFrame(std::vector<uchar> &imageData);
