@@ -28,10 +28,16 @@ namespace rr{
         std::string cmd;
         while(true){
             std::cin >> cmd;
-            if (cmd == "QUIT") {
-                that->stopVedioStreamer();
-                that->stopMovementHardware();
-                that->stopConnection();
+            if (cmd == "QUIT" || cmd == "quit") {
+                if (that->streamerIsStarted()) {
+                     that->stopVedioStreamer();                   
+                }
+                if (that->hardwareIsStarted()) {
+                     that->stopMovementHardware();                   
+                }
+                if (that->connectionIsStarted()) {
+                     that->stopConnection();
+                }
                 break;
             } 
         }
@@ -78,8 +84,12 @@ namespace rr{
         return this->hardwareState;
     }
 
-    bool Services::streamerISStarted(){
+    bool Services::streamerIsStarted(){
         return this->streamerState;
+    }
+
+    bool Services::connectionIsStarted(){
+        return this->connectionState;
     }
 
     int Services::getImageProperty (int propId) {

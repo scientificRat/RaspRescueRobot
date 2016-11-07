@@ -53,11 +53,14 @@ int main(int argc, char** argv) {
         std::cerr << "Expected argument after options"<<std::endl;
         exit(EXIT_FAILURE);
     }
-     //std::cout<<optind<<argc<<std::endl;
-     rr::TCPComponent& tcp =  rr::TCPComponent::create(serverAddress,serverPort,workingPort);
     
      rr::Services& services = rr::Services::getInstance();
      services.setDelayTime(delayTime);
+
+     //std::cout<<optind<<argc<<std::endl;
+     rr::TCPComponent& tcp =  rr::TCPComponent::create(serverAddress,serverPort,workingPort);
+    
+     //start connection 
      services.startConnection();    
      return 0;
 }

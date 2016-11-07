@@ -50,7 +50,9 @@ namespace rr{
 
          bool hardwareIsStarted();   
 
-         bool streamerISStarted();
+         bool streamerIsStarted();
+
+         bool connectionIsStarted();
          
          void move(char* command);
 

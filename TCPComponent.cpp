@@ -204,7 +204,6 @@ namespace rr{
             read(that->sockfd,headBuffer, 5);
             char* dataBuffer = new char[*((int*)(headBuffer+1))];
             read(that->sockfd,dataBuffer,*((int*)(headBuffer+1)));
-            // (注意：服务器返回的消息type='m' 内容为json, 控制端发送的消息type ='c'表示命令)
 
             //debug
             #ifndef DEBUG
@@ -213,6 +212,7 @@ namespace rr{
             std::cerr <<"In "<<__FILE__<<" at "<<__LINE__<<" line."<<std::endl;
             #endif
 
+            // (注意：服务器返回的消息type='m' 内容为json, 控制端发送的消息type ='c'表示命令)
             if(headBuffer[0]=='c'){
                  float left=*((float*)dataBuffer);
                  float right=*((float*)dataBuffer+1);
@@ -246,7 +246,7 @@ namespace rr{
                  }
 
                  if (action == "startVideo") {
-                    if (services.streamerISStarted())
+                    if (services.streamerIsStarted())
                          //start the sendThread
                          std::cerr<<"streamer had been started!"<<std::endl;
                     else{
@@ -256,7 +256,7 @@ namespace rr{
                 }else if(action == "stopVideo") {
                     services.stopVedioStreamer();
                     std::cout<<"video streamer stoped!"<<std::endl;
-                }else if (action == "configure") {
+                }else if (action == "configuration") {
                      if (reader.parse(ResponseJson, root)) {
                          height = root["height"].asInt();
                          width = root["width"].asInt();
@@ -265,6 +265,15 @@ namespace rr{
                          saturation = root["saturation"].asInt();
 
                      }
+
+                     #ifdef DEBUG
+                     //std::cout <<"image height as : " << height << std::endl; 
+                     //std::cout <<"image width as : " << width << std::endl; 
+                     std::cout <<"image brightness as : " << brightness << std::endl; 
+                     std::cout <<"image contrast as : " << contrast << std::endl; 
+                     std::cout <<"image saturation as : " << saturation << std::endl; 
+                     std::cout <<"In "<<__FILE__<<" , at "<<__LINE__<<" line."<<std::endl;
+                     #endif
                      // if (height != services.getImageProperty(CV_CAP_PROP_FRAME_HEIGHT)) {
                      //     services.setImageProperty(CV_CAP_PROP_FRAME_HEIGHT,height);
                      // }
