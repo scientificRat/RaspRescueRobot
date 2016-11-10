@@ -392,7 +392,7 @@ namespace rr{
          sendMessage(sendBuffer,5+length);
 
          delete[] sendBuffer;
-         this->sendBuffer = nullptr;
+         sendBuffer = nullptr;
     }//end of sendRequest
 
 
