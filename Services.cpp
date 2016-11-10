@@ -100,13 +100,37 @@ namespace rr{
          return videoStreamer->setImageProperty(propId,value);
     }
     
-    void Services::move(char* command){
+    void Services::move(short left_speed,short right_speed){
         if (true == hardwareIsStarted()){
             this->car = rr::CarHardware::getInstance();
-            this->car->run(command);
+            this->car->run(left_speed,right_speed);
         }else{
             std::cerr<<"You should start hardware at first."<<std::endl;
         }
+    }
+    void Services::goForwardOneStep(){
+        this->car = rr::CarHardware::getInstance();
+        this->car->goForwardOneStep();
+    }
+    void Services::turnLeftOneStep(){
+        this->car = rr::CarHardware::getInstance();
+        this->car->turnLeftOneStep();
+    }
+    void Services::turnRightOneStep(){
+        this->car = rr::CarHardware::getInstance();
+        this->car->turnRightOneStep();
+    }
+    void Services::goBackOneStep(){
+        this->car = rr::CarHardware::getInstance();
+        this->car->goBackOneStep();
+    }
+    void Services::turnLightOn(){
+        this->car = rr::CarHardware::getInstance();
+        this->car->turnLightOn();
+    }
+    void Services::turnLightOff(){
+        this->car = rr::CarHardware::getInstance();
+        this->car->turnLightOff();
     }
 
     void Services::setDelayTime(long delayTime){

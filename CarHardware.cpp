@@ -35,43 +35,53 @@ namespace rr{
         this->carRun = true;
     }
 
-    void CarHardware::run(char* cmd){
-            /*
-            int mLeft = (int) speed * left;
-            int mRight = (int) speed * right;
-            if (mLeft == 0 && mRight == 0 ){
-                softPwmWrite (MOTOR_LEFT_1,0);
-                softPwmWrite (MOTOR_LEFT_2,0);
-                softPwmWrite (MOTOR_RIGHT_1,0);
-                softPwmWrite (MOTOR_RIGHT_2,0);
-            }else if(mLeft < 0 && mRight < 0 ){
-                softPwmWrite (MOTOR_LEFT_1,0);
-                softPwmWrite (MOTOR_LEFT_2,-mLeft);
-                softPwmWrite (MOTOR_RIGHT_1,0);
-                softPwmWrite (MOTOR_RIGHT_2,-mRight);
-            }else if(mLeft < 0 && mRight > 0 ){
-                softPwmWrite (MOTOR_LEFT_1,0);
-                softPwmWrite (MOTOR_LEFT_2,-mLeft);
-                softPwmWrite (MOTOR_RIGHT_1,mRight);
-                softPwmWrite (MOTOR_RIGHT_2,0);
-            }else if(mLeft > 0 && mRight < 0 ){
-                softPwmWrite (MOTOR_LEFT_1,mLeft);
-                softPwmWrite (MOTOR_LEFT_2,0);
-                softPwmWrite (MOTOR_RIGHT_1,0);
-                softPwmWrite (MOTOR_RIGHT_2,-mRight);
-            }else if(mLeft > 0 && mRight > 0 ){
-                softPwmWrite (MOTOR_LEFT_1,mLeft);
-                softPwmWrite (MOTOR_LEFT_2,0);
-                softPwmWrite (MOTOR_RIGHT_1,mRight);
-                softPwmWrite (MOTOR_RIGHT_2,0);
-            }*/
-
-         char* command = new char[2*sizeof(float)+1];
-         strncpy(command, cmd, 2*sizeof(float));
-         serialPuts (serialFd, command);
-         delete[] command;
+    void CarHardware::run(short left_speed, short right_speed){
+        //限制范围，避免出错
+        if(left_speed >1000){
+            left_speed =1000;
+        }
+        if(left_speed <-1000){
+            left_speed =-1000;
+        }
+        if(right_speed >1000){
+            right_speed =1000;
+        }
+        if(right_speed <-1000){
+            right_speed =-1000;
+        }
+        serialPutchar(serialFd,'c');
+        char* buff1 = (char*)&left_speed;
+        char* buff2 = (char*)&right_speed;
+        serialPutchar(serialFd, buff1[0]);
+        serialPutchar(serialFd, buff1[1]);
+        serialPutchar(serialFd, buff2[0]);
+        serialPutchar(serialFd, buff2[1]);
     }
 
+    void CarHardware::goForwardOneStep(){
+        serialPutchar(serialFd,'^');
+    }
+
+    void CarHardware::turnLeftOneStep(){
+        serialPutchar(serialFd,'<');
+    }
+
+    void CarHardware::turnRightOneStep(){
+        serialPutchar(serialFd,'>');
+    }
+
+    void CarHardware::goBackOneStep(){
+        serialPutchar(serialFd,'v');
+    }
+
+    void CarHardware::turnLightOn(){
+        serialPutchar(serialFd,'l');
+    }
+
+    void CarHardware::turnLightOff(){
+        serialPutchar(serialFd,'o');
+    }
+    
     //release car resources
     void CarHardware::release(){
         this->carRun = false;

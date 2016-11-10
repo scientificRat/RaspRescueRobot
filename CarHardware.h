@@ -75,8 +75,20 @@ namespace rr{
             }
 
             void start();
+            // 直接控制速度,[危险方法],远端控制时不能使用
+            void run(short left_speed, short right_speed);
 
-            void run(char* command);
+            void goForwardOneStep();
+
+            void turnLeftOneStep();
+
+            void turnRightOneStep();
+
+            void goBackOneStep();
+            
+            void turnLightOn();
+
+            void turnLightOff();
 
             //release car resources
             void release();

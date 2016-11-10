@@ -214,20 +214,28 @@ namespace rr{
 
             // (注意：服务器返回的消息type='m' 内容为json, 控制端发送的消息type ='c'表示命令)
             if(headBuffer[0]=='c'){
-                 float left=*((float*)dataBuffer);
-                 float right=*((float*)dataBuffer+1);
-
+                 float x_offset=*((float*)dataBuffer);
+                 float y_offset=*((float*)dataBuffer+1);
                  //debug
                  //#ifndef DEBUG
-                 std::cerr << "left:"<< left <<"\tright: "<<right<<std::endl;
+                 std::cerr << "x_offset:"<< x_offset <<"\ty_offset: "<< y_offset <<std::endl;
                  std::cerr <<"In "<<__FILE__<<" at "<<__LINE__<<" line."<<std::endl;
                  //#endif
-                 if (services.hardwareIsStarted()){
-                     services.move(dataBuffer);
-                 }
-                 else{
+                 //初始化硬件设备
+                 if (!services.hardwareIsStarted()){
                      services.startMovementHardware();
-                     services.move(dataBuffer);
+                 }
+                 if(x_offset>0.1){
+                     services.turnRightOneStep();
+                 } 
+                 else if(x_offset<-0.1){
+                     services.turnLeftOneStep();
+                 }
+                 if(y_offset>0.1){
+                     services.goForwardOneStep();
+                 } 
+                 else if(y_offset<-0.1){
+                     services.goBackOneStep();
                  }
             }
             else if(headBuffer[0]=='m'){

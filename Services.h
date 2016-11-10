@@ -13,58 +13,71 @@
 #include "VideoStreamer.h"
 #include "CarHardware.h"
 
-namespace rr{
-     class Services {
-     private:
-         Services();
-         
-         Services(const Services&)   = delete;
-         Services& operator=(const Services&)  = delete;
-         
-         VideoStreamer *videoStreamer = nullptr;
-         CarHardware* car = nullptr;
-         bool hardwareState;
-         bool streamerState;
-         bool connectionState;
+namespace rr
+{
+class Services
+{
+  private:
+    Services();
 
-         std::thread* stopThread = nullptr;  
-         static void stopService(Services* that);
-     public:
-         static Services& getInstance(){
-			static Services services;
-			return services;
-		}
-        
-         void startVedioStreamer();
+    Services(const Services &) = delete;
+    Services &operator=(const Services &) = delete;
 
-         void stopVedioStreamer();
-        
-         void startConnection();
+    VideoStreamer *videoStreamer = nullptr;
+    CarHardware *car = nullptr;
+    bool hardwareState;
+    bool streamerState;
+    bool connectionState;
 
-         void stopConnection();
-        
-         void startMovementHardware();
+    std::thread *stopThread = nullptr;
+    static void stopService(Services *that);
 
-         //stop and release hardware resources
-         void stopMovementHardware();     
+  public:
+    static Services &getInstance()
+    {
+        static Services services;
+        return services;
+    }
 
-         bool hardwareIsStarted();   
+    void startVedioStreamer();
 
-         bool streamerIsStarted();
+    void stopVedioStreamer();
 
-         bool connectionIsStarted();
-         
-         void move(char* command);
+    void startConnection();
 
-         int getImageProperty (int propId);
+    void stopConnection();
 
-         bool setImageProperty (int propId,int value);
+    void startMovementHardware();
 
-         void setDelayTime(long delayTime);
+    //stop and release hardware resources
+    void stopMovementHardware();
 
-    };
+    bool hardwareIsStarted();
 
+    bool streamerIsStarted();
+
+    bool connectionIsStarted();
+    // 直接控制速度,在远端控制时不能使用
+    void move(short left_speed, short right_speed);
+
+    void goForwardOneStep();
+
+    void turnLeftOneStep();
+
+    void turnRightOneStep();
+
+    void goBackOneStep();
+
+    void turnLightOn();
+
+    void turnLightOff();
+
+    int getImageProperty(int propId);
+
+    bool setImageProperty(int propId, int value);
+
+    void setDelayTime(long delayTime);
+};
 }
-
 
 #endif /* RASPBERRY_ROBOT_SERVICES__*/
