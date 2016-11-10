@@ -314,9 +314,9 @@ namespace rr{
                 if (error != "")
                 {
                      std::cout << error << std::endl;
-                     this->loginState = false;
-                     close(sockfd);
-                     this->reconnection();
+                     that->loginState = false;
+                     close(that->sockfd);
+                     that->reconnection();
                 }
                 //just for deubg
                  #ifdef DEBUG
