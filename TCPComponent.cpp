@@ -74,7 +74,7 @@ namespace rr{
             //close(sockfd);
             //sockfd = -3;
             std::cerr<<"socket connect failed"<<std::endl;
-            reconnection();
+            this->reconnection();
         }
     }
 
@@ -233,7 +233,8 @@ namespace rr{
                  }
             }
             else if(headBuffer[0]=='m'){
-                 std::string action ="";
+                 std::string action = "";
+                 std::string error = "";
                  std::string ResponseJson = std::string(dataBuffer);
                  Json::Reader reader;
                  Json::Value root;
@@ -242,9 +243,11 @@ namespace rr{
                  int brightness = 0;
                  int contrast = 0;
                  int saturation = 0;
+
+                 //deal with root
                  if (reader.parse(ResponseJson, root)) {
                      action = root["action"].asString();
-
+                     error = root["error"].asString();
                  }
 
                  if (action == "startVideo") {
@@ -298,6 +301,15 @@ namespace rr{
                      std::cout <<"set image contrast as : " << contrast << std::endl;
                      std::cout <<"set image saturation as : " << saturation << std::endl;
                 }
+
+                //if error detected
+                if (error ! = "")
+                {
+                     std::cout << error << std::endl;
+                     this->loginState = false;
+                     close(sockfd);
+                     this->reconnection();
+                }
                 //just for deubg
                  #ifdef DEBUG
                  std::cout<<"ResponseJson: "<<ResponseJson<<std::endl;
@@ -347,11 +359,11 @@ namespace rr{
                          std::cerr <<"socket is shutdown by interrupt signal."<<std::endl;
                     }
                 }
-                 reconnection();
+                 this->reconnection();
             }
             else if(errno == EPIPE) {
                 std::cerr <<"server socket had been closed. And try to connect again after 10 seconds"<<std::endl;
-                reconnection();
+                this->reconnection();
             }
          }
          this->sendMutex.unlock();
