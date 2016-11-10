@@ -24,7 +24,7 @@ namespace rr{
     //start VideoStramer
     void VideoStreamer::start() {
          this->isStop = false;
-         this->imageProcessUnit->start(); 
+         this->imageProcessUnit->start();
          while (!this->isStop) {
              std::vector<uchar> &image = this->imageProcessUnit->getEncodeImage();
              sendVideoFrame(image);
@@ -48,7 +48,7 @@ namespace rr{
     }
 
     void VideoStreamer::setDelayTime(long delayTime){
-        this->delayTime = delayTime;
+         this->delayTime = delayTime;
     }
 
     void VideoStreamer::sendVideoFrame(std::vector<uchar> &imageData) {

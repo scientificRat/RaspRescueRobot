@@ -39,18 +39,18 @@ namespace rr{
 
 
          //get login data
-         getLoginInfo();
+         this->getLoginInfo();
 
         //create tcp socket
         if(-1 == (sockfd = socket(AF_INET, SOCK_STREAM, 0))){
             std::cerr<<"socket initial failed\n";
         }
-        
+
         //close TIME_WAIT state
-        int option = 1; 
-        if ( setsockopt ( sockfd, SOL_SOCKET, SO_REUSEADDR, &option, sizeof( option ) ) < 0 ) { 
+        int option = 1;
+        if (setsockopt (sockfd, SOL_SOCKET, SO_REUSEADDR, &option, sizeof(option)) < 0) {
             throw std::runtime_error("set socket option failed!");
-        } 
+        }
 
         //set the addr of the local socket
         bzero(&workingAddr, sizeof(sockaddr_in));
@@ -163,8 +163,10 @@ namespace rr{
          }
 
          delete[] headBuffer;
+         this->headBuffer = nullptr;
          delete[] dataBuffer;
-         std::cerr << "No ResponseJson "<<std::endl;
+         this->dataBuffer = nullptr;
+         std::cerr << "No ResponseJson Receive!"<<std::endl;
     }
 
 
@@ -183,8 +185,8 @@ namespace rr{
             }
             //try logining again
             if (connectState != -1) {
-                login();
-            } 
+                this->login();
+            }
         }
     }
 
@@ -242,7 +244,7 @@ namespace rr{
                  int saturation = 0;
                  if (reader.parse(ResponseJson, root)) {
                      action = root["action"].asString();
-                     
+
                  }
 
                  if (action == "startVideo") {
@@ -267,11 +269,11 @@ namespace rr{
                      }
 
                      #ifdef DEBUG
-                     //std::cout <<"image height as : " << height << std::endl; 
-                     //std::cout <<"image width as : " << width << std::endl; 
-                     std::cout <<"image brightness as : " << brightness << std::endl; 
-                     std::cout <<"image contrast as : " << contrast << std::endl; 
-                     std::cout <<"image saturation as : " << saturation << std::endl; 
+                     //std::cout <<"image height as : " << height << std::endl;
+                     //std::cout <<"image width as : " << width << std::endl;
+                     std::cout <<"image brightness as : " << brightness << std::endl;
+                     std::cout <<"image contrast as : " << contrast << std::endl;
+                     std::cout <<"image saturation as : " << saturation << std::endl;
                      std::cout <<"In "<<__FILE__<<" , at "<<__LINE__<<" line."<<std::endl;
                      #endif
                      // if (height != services.getImageProperty(CV_CAP_PROP_FRAME_HEIGHT)) {
@@ -290,11 +292,11 @@ namespace rr{
                          services.setImageProperty(CV_CAP_PROP_SATURATION,saturation);
                      }
                      //set height and width is dangerous
-                     //std::cout <<"set image height as : " << height << std::endl; 
-                     //std::cout <<"set image width as : " << width << std::endl; 
-                     std::cout <<"set image brightness as : " << brightness << std::endl; 
-                     std::cout <<"set image contrast as : " << contrast << std::endl; 
-                     std::cout <<"set image saturation as : " << saturation << std::endl; 
+                     //std::cout <<"set image height as : " << height << std::endl;
+                     //std::cout <<"set image width as : " << width << std::endl;
+                     std::cout <<"set image brightness as : " << brightness << std::endl;
+                     std::cout <<"set image contrast as : " << contrast << std::endl;
+                     std::cout <<"set image saturation as : " << saturation << std::endl;
                 }
                 //just for deubg
                  #ifdef DEBUG
@@ -303,11 +305,13 @@ namespace rr{
                  #endif
             }
             else {
-                 std::cout << "ResponseJson error" << std::endl;
+                 std::cout << "ResponseJson error Receive!" << std::endl;
             }
 
             delete[] headBuffer;
+            this->headBuffer = nullptr;
             delete[] dataBuffer;
+            this->dataBuffer = nullptr;
         }//end of while
 
     }
@@ -368,6 +372,7 @@ namespace rr{
          sendMessage(sendBuffer,5+length);
 
          delete[] sendBuffer;
+         this->sendBuffer = nullptr;
     }//end of sendRequest
 
 
