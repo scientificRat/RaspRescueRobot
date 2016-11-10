@@ -163,9 +163,9 @@ namespace rr{
          }
 
          delete[] headBuffer;
-         this->headBuffer = nullptr;
+         headBuffer = nullptr;
          delete[] dataBuffer;
-         this->dataBuffer = nullptr;
+         dataBuffer = nullptr;
          std::cerr << "No ResponseJson Receive!"<<std::endl;
     }
 
@@ -229,13 +229,13 @@ namespace rr{
                  }
                  if(x_offset>0.1){
                      services.turnRightOneStep();
-                 } 
+                 }
                  else if(x_offset<-0.1){
                      services.turnLeftOneStep();
                  }
                  if(y_offset>0.1){
                      services.goForwardOneStep();
-                 } 
+                 }
                  else if(y_offset<-0.1){
                      services.goBackOneStep();
                  }
@@ -311,7 +311,7 @@ namespace rr{
                 }
 
                 //if error detected
-                if (error ! = "")
+                if (error != "")
                 {
                      std::cout << error << std::endl;
                      this->loginState = false;
@@ -329,9 +329,9 @@ namespace rr{
             }
 
             delete[] headBuffer;
-            this->headBuffer = nullptr;
+            headBuffer = nullptr;
             delete[] dataBuffer;
-            this->dataBuffer = nullptr;
+            dataBuffer = nullptr;
         }//end of while
 
     }
