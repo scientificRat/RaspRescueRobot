@@ -28,6 +28,7 @@ class Services
     bool hardwareState;
     bool streamerState;
     bool connectionState;
+    bool lightState;
 
     std::thread *stopThread = nullptr;
     static void stopService(Services *that);
@@ -57,6 +58,8 @@ class Services
     bool streamerIsStarted();
 
     bool connectionIsStarted();
+
+    bool lightIsOn();
     // 直接控制速度,在远端控制时不能使用
     void move(short left_speed, short right_speed);
 

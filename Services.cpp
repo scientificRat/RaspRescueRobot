@@ -20,7 +20,8 @@ namespace rr{
 	Services::Services():
     hardwareState(false),
     streamerState(false),
-    connectionState(false){
+    connectionState(false),
+		lightState(false){
          this->videoStreamer = new VideoStreamer();
          this->stopThread = new std::thread(stopService, this);
     }
@@ -92,6 +93,10 @@ namespace rr{
         return this->connectionState;
     }
 
+    bool Services::lightIsOn() {
+				return this->lightState;
+		}
+
     int Services::getImageProperty (int propId) {
          return this->videoStreamer->getImageProperty(propId);
     }
@@ -99,7 +104,7 @@ namespace rr{
     bool Services::setImageProperty (int propId,int value) {
          return this->videoStreamer->setImageProperty(propId,value);
     }
-    
+
     void Services::move(short left_speed,short right_speed){
         if (true == hardwareIsStarted()){
             this->car = rr::CarHardware::getInstance();
@@ -125,10 +130,12 @@ namespace rr{
         this->car->goBackOneStep();
     }
     void Services::turnLightOn(){
+			  this->lightState = true;
         this->car = rr::CarHardware::getInstance();
         this->car->turnLightOn();
     }
     void Services::turnLightOff(){
+				this->lightState = false;
         this->car = rr::CarHardware::getInstance();
         this->car->turnLightOff();
     }

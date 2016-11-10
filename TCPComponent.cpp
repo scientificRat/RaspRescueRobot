@@ -308,6 +308,20 @@ namespace rr{
                      std::cout <<"set image brightness as : " << brightness << std::endl;
                      std::cout <<"set image contrast as : " << contrast << std::endl;
                      std::cout <<"set image saturation as : " << saturation << std::endl;
+                }else if(action = "lightON") {
+                     if (!services.lightIsOn()) {
+                         services.turnLightOn();
+                         std::cout << "Light On." <<std::endl;
+                     }else {
+                         std::cout << "Light had been on." <<std::endl;
+                     }
+                }else if(action = "lightOFF") {
+                     if (services.lightIsOn()) {
+                         services.turnLightOff();
+                         std::cout << "Light Off." <<std::endl;
+                     }else {
+                         std::cout << "Light had been off." <<std::endl;
+                     }
                 }
 
                 //if error detected
