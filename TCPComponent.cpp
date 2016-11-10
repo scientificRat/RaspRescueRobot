@@ -39,18 +39,18 @@ namespace rr{
 
 
          //get login data
-         getLoginInfo();
+         this->getLoginInfo();
 
         //create tcp socket
         if(-1 == (sockfd = socket(AF_INET, SOCK_STREAM, 0))){
             std::cerr<<"socket initial failed\n";
         }
-        
+
         //close TIME_WAIT state
-        int option = 1; 
-        if ( setsockopt ( sockfd, SOL_SOCKET, SO_REUSEADDR, &option, sizeof( option ) ) < 0 ) { 
+        int option = 1;
+        if (setsockopt (sockfd, SOL_SOCKET, SO_REUSEADDR, &option, sizeof(option)) < 0) {
             throw std::runtime_error("set socket option failed!");
-        } 
+        }
 
         //set the addr of the local socket
         bzero(&workingAddr, sizeof(sockaddr_in));
@@ -74,7 +74,7 @@ namespace rr{
             //close(sockfd);
             //sockfd = -3;
             std::cerr<<"socket connect failed"<<std::endl;
-            reconnection();
+            this->reconnection();
         }
     }
 
@@ -163,8 +163,10 @@ namespace rr{
          }
 
          delete[] headBuffer;
+         this->headBuffer = nullptr;
          delete[] dataBuffer;
-         std::cerr << "No ResponseJson "<<std::endl;
+         this->dataBuffer = nullptr;
+         std::cerr << "No ResponseJson Receive!"<<std::endl;
     }
 
 
@@ -183,8 +185,8 @@ namespace rr{
             }
             //try logining again
             if (connectState != -1) {
-                login();
-            } 
+                this->login();
+            }
         }
     }
 
@@ -239,7 +241,8 @@ namespace rr{
                  }
             }
             else if(headBuffer[0]=='m'){
-                 std::string action ="";
+                 std::string action = "";
+                 std::string error = "";
                  std::string ResponseJson = std::string(dataBuffer);
                  Json::Reader reader;
                  Json::Value root;
@@ -248,9 +251,11 @@ namespace rr{
                  int brightness = 0;
                  int contrast = 0;
                  int saturation = 0;
+
+                 //deal with root
                  if (reader.parse(ResponseJson, root)) {
                      action = root["action"].asString();
-                     
+                     error = root["error"].asString();
                  }
 
                  if (action == "startVideo") {
@@ -275,11 +280,11 @@ namespace rr{
                      }
 
                      #ifdef DEBUG
-                     //std::cout <<"image height as : " << height << std::endl; 
-                     //std::cout <<"image width as : " << width << std::endl; 
-                     std::cout <<"image brightness as : " << brightness << std::endl; 
-                     std::cout <<"image contrast as : " << contrast << std::endl; 
-                     std::cout <<"image saturation as : " << saturation << std::endl; 
+                     //std::cout <<"image height as : " << height << std::endl;
+                     //std::cout <<"image width as : " << width << std::endl;
+                     std::cout <<"image brightness as : " << brightness << std::endl;
+                     std::cout <<"image contrast as : " << contrast << std::endl;
+                     std::cout <<"image saturation as : " << saturation << std::endl;
                      std::cout <<"In "<<__FILE__<<" , at "<<__LINE__<<" line."<<std::endl;
                      #endif
                      // if (height != services.getImageProperty(CV_CAP_PROP_FRAME_HEIGHT)) {
@@ -298,11 +303,20 @@ namespace rr{
                          services.setImageProperty(CV_CAP_PROP_SATURATION,saturation);
                      }
                      //set height and width is dangerous
-                     //std::cout <<"set image height as : " << height << std::endl; 
-                     //std::cout <<"set image width as : " << width << std::endl; 
-                     std::cout <<"set image brightness as : " << brightness << std::endl; 
-                     std::cout <<"set image contrast as : " << contrast << std::endl; 
-                     std::cout <<"set image saturation as : " << saturation << std::endl; 
+                     //std::cout <<"set image height as : " << height << std::endl;
+                     //std::cout <<"set image width as : " << width << std::endl;
+                     std::cout <<"set image brightness as : " << brightness << std::endl;
+                     std::cout <<"set image contrast as : " << contrast << std::endl;
+                     std::cout <<"set image saturation as : " << saturation << std::endl;
+                }
+
+                //if error detected
+                if (error ! = "")
+                {
+                     std::cout << error << std::endl;
+                     this->loginState = false;
+                     close(sockfd);
+                     this->reconnection();
                 }
                 //just for deubg
                  #ifdef DEBUG
@@ -311,11 +325,13 @@ namespace rr{
                  #endif
             }
             else {
-                 std::cout << "ResponseJson error" << std::endl;
+                 std::cout << "ResponseJson error Receive!" << std::endl;
             }
 
             delete[] headBuffer;
+            this->headBuffer = nullptr;
             delete[] dataBuffer;
+            this->dataBuffer = nullptr;
         }//end of while
 
     }
@@ -351,11 +367,11 @@ namespace rr{
                          std::cerr <<"socket is shutdown by interrupt signal."<<std::endl;
                     }
                 }
-                 reconnection();
+                 this->reconnection();
             }
             else if(errno == EPIPE) {
                 std::cerr <<"server socket had been closed. And try to connect again after 10 seconds"<<std::endl;
-                reconnection();
+                this->reconnection();
             }
          }
          this->sendMutex.unlock();
@@ -376,6 +392,7 @@ namespace rr{
          sendMessage(sendBuffer,5+length);
 
          delete[] sendBuffer;
+         this->sendBuffer = nullptr;
     }//end of sendRequest
 
 

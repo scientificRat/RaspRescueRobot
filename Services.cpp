@@ -21,7 +21,7 @@ namespace rr{
     hardwareState(false),
     streamerState(false),
     connectionState(false){
-         videoStreamer = new VideoStreamer();
+         this->videoStreamer = new VideoStreamer();
          this->stopThread = new std::thread(stopService, this);
     }
     void Services::stopService(Services* that){
@@ -30,16 +30,16 @@ namespace rr{
             std::cin >> cmd;
             if (cmd == "QUIT" || cmd == "quit") {
                 if (that->streamerIsStarted()) {
-                     that->stopVedioStreamer();                   
+                     that->stopVedioStreamer();
                 }
                 if (that->hardwareIsStarted()) {
-                     that->stopMovementHardware();                   
+                     that->stopMovementHardware();
                 }
                 if (that->connectionIsStarted()) {
                      that->stopConnection();
                 }
                 break;
-            } 
+            }
         }
         //stop service
         exit(0);
@@ -63,7 +63,7 @@ namespace rr{
 
     void Services::stopConnection(){
          this->connectionState = false;
-        TCPComponent& tcpComponent = rr::TCPComponent::getInstance();
+         TCPComponent& tcpComponent = rr::TCPComponent::getInstance();
          tcpComponent.stopConnection();
     }
 
@@ -93,11 +93,11 @@ namespace rr{
     }
 
     int Services::getImageProperty (int propId) {
-         return videoStreamer->getImageProperty(propId);
+         return this->videoStreamer->getImageProperty(propId);
     }
 
     bool Services::setImageProperty (int propId,int value) {
-         return videoStreamer->setImageProperty(propId,value);
+         return this->videoStreamer->setImageProperty(propId,value);
     }
     
     void Services::move(short left_speed,short right_speed){
@@ -134,6 +134,6 @@ namespace rr{
     }
 
     void Services::setDelayTime(long delayTime){
-         videoStreamer->setDelayTime(delayTime);
+         this->videoStreamer->setDelayTime(delayTime);
     }
 }
