@@ -67,7 +67,7 @@ namespace rr{
                 if (nullptr == car){
                     instanceMutex.lock();
                     if (nullptr == car){
-                        car = new CarHardware("/dev/ttyAMA0",115200);
+                        car = new CarHardware("/dev/ttyUSB0",115200);
                     }
                     instanceMutex.unlock();
                 }

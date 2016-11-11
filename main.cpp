@@ -22,7 +22,7 @@ int main(int argc, char** argv) {
      int workingPort = 8900;
      long delayTime = 50000;
   
-     const char* optString= "a:p:P:t:";
+     const char* optString= "a:p:P:t";
      int opt = getopt(argc,argv,optString);
      while(opt!= -1){
          switch(opt) {

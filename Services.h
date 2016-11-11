@@ -3,7 +3,7 @@
 //  rescueRobot
 //
 //  Created by 黄正跃 on 23/09/2016.
-//  Last Modified by Wang han on 23/10/2016
+//  Last Modified by Wang han on 11/11/2016
 //  Copyright © 2016 黄正跃. All rights reserved.
 //
 
@@ -12,6 +12,7 @@
 
 #include "VideoStreamer.h"
 #include "CarHardware.h"
+#include "RaspTypes.h"
 
 namespace rr
 {
@@ -29,6 +30,7 @@ class Services
     bool streamerState;
     bool connectionState;
     bool lightState;
+    bool detectorState;
 
     std::thread *stopThread = nullptr;
     static void stopService(Services *that);
@@ -53,6 +55,10 @@ class Services
     //stop and release hardware resources
     void stopMovementHardware();
 
+    void startDetector();
+
+    void stopDetector();
+
     bool hardwareIsStarted();
 
     bool streamerIsStarted();
@@ -60,20 +66,15 @@ class Services
     bool connectionIsStarted();
 
     bool lightIsOn();
+
+    bool detectorIsStarted();
+
     // 直接控制速度,在远端控制时不能使用
     void move(short left_speed, short right_speed);
 
-    void goForwardOneStep();
+    void goOneStep(int direction);
 
-    void turnLeftOneStep();
-
-    void turnRightOneStep();
-
-    void goBackOneStep();
-
-    void turnLightOn();
-
-    void turnLightOff();
+    void turnLight(int state);
 
     int getImageProperty(int propId);
 

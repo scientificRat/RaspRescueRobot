@@ -5,13 +5,16 @@
 //  Copyright © 2016 rescueRobot. SCU. All rights reserved.
 
 #include "ImageProcessUnit.h"
+#include "NPDDector.h"
 
 namespace rr{
     
      /*
      * Consturctor
      */
-    ImageProcessUnit::ImageProcessUnit(){
+    ImageProcessUnit::ImageProcessUnit(bool processCommand):
+    processCommand(false){
+         this->processCommand = processCommand;
          mImageCaptureUnit  = new ImageCaptureUnit();
     }
     
@@ -22,6 +25,7 @@ namespace rr{
          mImageCaptureUnit->stop();
          delete mImageCaptureUnit;
          mImageCaptureUnit  = nullptr;
+         this->processCommand = false;
      }
     
      /*
@@ -50,14 +54,16 @@ namespace rr{
      */
      std::vector<uchar>& ImageProcessUnit::getEncodeImage(){
          cv::Mat& raw_image =this->mImageCaptureUnit->getImage();
-         this->processImage(raw_image);
+         if (this->ProcessState())
+             this->processImage(raw_image);
          cv::imencode(".jpg", raw_image, this->mEncodeImage, std::vector<int>());
          return this->mEncodeImage;
      }
      
      
     void ImageProcessUnit::processImage(cv::Mat& mImage){
-    //empty
+        NPDDector& dector = rr::NPDDector::getInstance();
+        dector.Detect(mImage);
     }
 
      /*
@@ -108,5 +114,17 @@ namespace rr{
                 return false;
         }
         return true;
+    }
+
+    void ImageProcessUnit::startProcessImage(){
+         this->processCommand = true;
+    }
+
+    void ImageProcessUnit::stopProcessImage() {
+         this->processCommand = false;
+    }
+
+    bool ImageProcessUnit::ProcessState() {
+         return this->processCommand;
     }
 }

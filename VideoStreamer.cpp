@@ -70,4 +70,11 @@ namespace rr{
 
     }
 
+     void VideoStreamer::startProcessImage() {
+         this->imageProcessUnit->startProcessImage();
+     }
+
+     void VideoStreamer::stopProcessImage() {
+         this->imageProcessUnit->stopProcessImage();
+     }
 }

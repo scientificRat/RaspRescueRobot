@@ -20,7 +20,7 @@ namespace rr {
         /*
         * Consturctor
         */
-        ImageProcessUnit();
+        ImageProcessUnit(bool processCommand = false);
 
         /*
          * Deconstructor
@@ -57,10 +57,18 @@ namespace rr {
          */
         bool setImageProperty (int propId,int value);
 
+        void startProcessImage();
+
+        void stopProcessImage();
+
+        bool ProcessState();
+
     private:
         ImageCaptureUnit *mImageCaptureUnit;
 
         std::vector <uchar> mEncodeImage;
+
+        bool processCommand;
 
         /*
         * Encode image (from mat to vecotr<uchar>)
