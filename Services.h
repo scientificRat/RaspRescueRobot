@@ -12,6 +12,7 @@
 
 #include "VideoStreamer.h"
 #include "CarHardware.h"
+#include "RaspTypes.h"
 
 namespace rr
 {
@@ -63,17 +64,9 @@ class Services
     // 直接控制速度,在远端控制时不能使用
     void move(short left_speed, short right_speed);
 
-    void goForwardOneStep();
+    void goOneStep(int direction);
 
-    void turnLeftOneStep();
-
-    void turnRightOneStep();
-
-    void goBackOneStep();
-
-    void turnLightOn();
-
-    void turnLightOff();
+    void turnLight(int state);
 
     int getImageProperty(int propId);
 

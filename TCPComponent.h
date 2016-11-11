@@ -26,6 +26,7 @@
 #include <string>
 
 #include "dist/json/json.h"
+#include "RaspTypes.h"
 
 namespace rr {
 
