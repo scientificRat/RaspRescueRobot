@@ -21,7 +21,8 @@ namespace rr{
     hardwareState(false),
     streamerState(false),
     connectionState(false),
-        lightState(false){
+    lightState(false),
+    detectorState(false){
          this->videoStreamer = new VideoStreamer();
          this->stopThread = new std::thread(stopService, this);
     }
@@ -38,6 +39,9 @@ namespace rr{
                 }
                 if (that->connectionIsStarted()) {
                      that->stopConnection();
+                } 
+                if (that->detectorIsStarted()) {
+                     that->stopDetector();
                 }
                 break;
             }
@@ -81,6 +85,14 @@ namespace rr{
         this->car->release();
     }
 
+    void Services::startDetector() {
+
+    }
+
+    void Services::stopDetector() {
+
+    }
+
     bool Services::hardwareIsStarted(){
         return this->hardwareState;
     }
@@ -94,9 +106,12 @@ namespace rr{
     }
 
     bool Services::lightIsOn() {
-                return this->lightState;
-        }
+        return this->lightState;
+    }
 
+    bool Services::detectorIsStarted() {
+         return this->detectorState;
+    }
     int Services::getImageProperty (int propId) {
          return this->videoStreamer->getImageProperty(propId);
     }

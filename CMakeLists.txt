@@ -25,6 +25,9 @@ IF (OpenCV_FOUND AND raspicam_CV_FOUND)
             CarHardware.cpp
             TCPComponent.cpp
             VideoStreamer.cpp
+            NPDCommon.cpp
+            NPDLearnGAB.cpp
+            NPDDector.cpp
             dist/jsoncpp.cpp
             )
 
