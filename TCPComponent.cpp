@@ -322,6 +322,16 @@ namespace rr{
                      }else {
                          std::cout << "Light had been off." <<std::endl;
                      }
+                }else if (action == "startDetection") {
+                     if (!services.detectorIsStarted()) {
+                         services.startDetector();
+                         std::cout <<"face detection start." << std::endl;
+                     }else {
+                         std::cout <<"face detection had been started. "<<std::endl;
+                     }
+                }else if(action == "stopDetection") {
+                     services.stopDetector();
+                     std::cout <<"face detection had been stoped." << std::endl;
                 }
 
                 //if error detected

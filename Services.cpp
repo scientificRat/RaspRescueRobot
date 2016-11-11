@@ -86,11 +86,14 @@ namespace rr{
     }
 
     void Services::startDetector() {
+         this->detectorState = true;
+         this->videoStreamer->startProcessImage();
 
     }
 
     void Services::stopDetector() {
-
+         this->detectorState = false;
+         this->videoStreamer->stopProcessImage();
     }
 
     bool Services::hardwareIsStarted(){

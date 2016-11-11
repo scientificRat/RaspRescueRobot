@@ -39,6 +39,10 @@ namespace rr {
 
          bool setImageProperty (int propId,int value);
 
+         void startProcessImage();
+
+         void stopProcessImage();
+
          void setDelayTime(long delayTime);
 
     private:

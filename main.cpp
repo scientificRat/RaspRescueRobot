@@ -22,7 +22,7 @@ int main(int argc, char** argv) {
      int workingPort = 8900;
      long delayTime = 50000;
   
-     const char* optString= "a:p:P:t:o";
+     const char* optString= "a:p:P:t";
      int opt = getopt(argc,argv,optString);
      while(opt!= -1){
          switch(opt) {
@@ -42,11 +42,8 @@ int main(int argc, char** argv) {
                  delayTime = atol(optarg);
                  std::cout<<"delayTime : "<<delayTime<<std::endl;
                  break;
-             case 'o':
-                //empty
-                break;
              default:
-                 std::cerr<<"Usage :"<< argv[0]<<" [- a serverAddress] [-p serverPort] [-P workingPort] [-t delayTime] [-o open faceDector]"<<std::endl;
+                 std::cerr<<"Usage :"<< argv[0]<<" [- a serverAddress] [-p serverPort] [-P workingPort] [-t delayTime]"<<std::endl;
                  exit(EXIT_FAILURE);
          }
          opt = getopt(argc,argv,optString);
