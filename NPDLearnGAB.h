@@ -132,4 +132,4 @@ namespace rr {
         std::vector<float> Logistic(std::vector<float> scores ,std::vector<int> index);
     };
 }
-#endif /*RASPBERRY_ROBOT_IMAGE_NPD_LEARN_GAB__/
+#endif /*RASPBERRY_ROBOT_IMAGE_NPD_LEARN_GAB__*/

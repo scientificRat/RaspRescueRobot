@@ -308,14 +308,14 @@ namespace rr{
                      std::cout <<"set image brightness as : " << brightness << std::endl;
                      std::cout <<"set image contrast as : " << contrast << std::endl;
                      std::cout <<"set image saturation as : " << saturation << std::endl;
-                }else if(action = "lightON") {
+                }else if(action == "lightON") {
                      if (!services.lightIsOn()) {
                          services.turnLight(RASPBERRY_ROBOT_LIGHT_STATE_ON);
                          std::cout << "Light On." <<std::endl;
                      }else {
                          std::cout << "Light had been on." <<std::endl;
                      }
-                }else if(action = "lightOFF") {
+                }else if(action == "lightOFF") {
                      if (services.lightIsOn()) {
                          services.turnLight(RASPBERRY_ROBOT_LIGHT_STATE_OFF);
                          std::cout << "Light Off." <<std::endl;
@@ -329,7 +329,7 @@ namespace rr{
                 {
                      std::cout << error << std::endl;
                      that->loginState = false;
-                     close(that->sockfd);
+                     //close(that->sockfd);
                      that->reconnection();
                 }
                 //just for deubg
@@ -367,25 +367,12 @@ namespace rr{
             this->loginState = false;
 
             if(errno == EINTR) {
-
-                std::cerr <<"server socket write error."<<std::endl;
-                //deal with close error
-                closeState = close(this->sockfd);
-
-                if (closeState < 0){
-                     if(errno == EBADF) {
-                         std::cerr<<"fd is not a valid socket."<<std::endl;
-                     }else if(errno == EIO) {
-                         std::cerr<<"IO error."<<std::endl;
-                     }else if (errno == EINTR) {
-                         std::cerr <<"socket is shutdown by interrupt signal."<<std::endl;
-                    }
-                }
+                 std::cerr <<"server socket write error."<<std::endl;
                  this->reconnection();
             }
             else if(errno == EPIPE) {
-                std::cerr <<"server socket had been closed. And try to connect again after 10 seconds"<<std::endl;
-                this->reconnection();
+                 std::cerr <<"server socket had been closed. And try to connect again after 10 seconds"<<std::endl;
+                 this->reconnection();
             }
          }
          this->sendMutex.unlock();

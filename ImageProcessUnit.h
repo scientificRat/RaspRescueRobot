@@ -20,7 +20,7 @@ namespace rr {
         /*
         * Consturctor
         */
-        ImageProcessUnit(bool processCommand);
+        ImageProcessUnit(bool processCommand = true);
 
         /*
          * Deconstructor

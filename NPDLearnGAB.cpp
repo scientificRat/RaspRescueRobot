@@ -17,8 +17,8 @@
 
 namespace rr{
 
-    #define max(a, b)  (((a) > (b)) ? (a) : (b))
-    #define min(a, b)  (((a) < (b)) ? (a) : (b))
+#define max(a, b)  (((a) > (b)) ? (a) : (b))
+#define min(a, b)  (((a) < (b)) ? (a) : (b))
 
 
     int pWinSize[]={24,29,35,41,50,60,72,86,103,124,149,178,214,257,308,370,444,532,639,767,920,1104,1325,1590,1908,2290,2747,3297,3956};
@@ -191,7 +191,7 @@ namespace rr{
 
             // calculate the offset values of each pixel in a subwindow
             // pre-determined offset of pixels in a subwindow
-            vector<int> offset(pWinSize[k] * pWinSize[k]);
+            std::vector<int> offset(pWinSize[k] * pWinSize[k]);
             int pp1 = 0, pp2 = 0, gap = height - pWinSize[k];
             
             // column coordinate 
@@ -242,14 +242,16 @@ namespace rr{
                 if(s == stages) {
                     cv::Rect roi(c, r, pWinSize[k], pWinSize[k]);
                     // modify the record by a single thread
-                    #pragma omp critical {
-                        rects.push_back(roi);
-                        scores.push_back(_score);
-                    }
+						#pragma omp critical
+						{ 
+							rects.push_back(roi);
+							scores.push_back(_score);
+						}
+					}
                 }
             }
         }
-    }
+
         std::vector<int> Srect;
         picked = Nms(rects,scores,Srect,0.5,img);
 
@@ -428,7 +430,7 @@ namespace rr{
         return Y;
     }
 
-    int GAB::Partation(cv::Mat predicate,std::vector<int>& label){
+    int GAB::Partation(cv::Mat predicate, std::vector<int>& label){
         int N = predicate.cols;
         std::vector<int> parent;
         std::vector<int> rank;
@@ -438,7 +440,7 @@ namespace rr{
             rank.push_back(0);
         }
 
-        for(int i=0;i<N;i++) 
+        for(int i=0;i<N;i++) {
             for(int j=0;j<N;j++) {
                 if (predicate.at<bool>(i,j)==0)
                     continue;
@@ -452,13 +454,14 @@ namespace rr{
                         parent[root_i] = root_j;
                     else{
                         parent[root_j] = root_i;
-                    rank[root_i] = rank[root_i] + 1;
+						rank[root_i] = rank[root_i] + 1;
                     }
                 }
             }
         }
 
         int nGroups = 0;
+		
         label.resize(N);
         for(int i=0;i<N;i++) {
             if(parent[i]==i){

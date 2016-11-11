@@ -4,20 +4,23 @@
 //  Created by Wang Han.SCU on 11/11/16.
 //  Copyright © 2016 rescueRobot. SCU. All rights reserved.
 
-namespace rr {
+
 #include <opencv2/core/core.hpp>
 
 #include "NPDCommon.h"
-/* \breif Wraper for call Detector */
+#include "NPDLearnGAB.h"
+
+namespace rr {
+    // breif Wraper for call Detector 
     class NPDDector{
     public:
         //single image detect
-        void Detect();
+        void Detect(cv::Mat& img);
 
         //get single instance
         static NPDDector& getInstance(){
             if (dector == nullptr) {
-                dector = new TrainDetector();
+                dector = new NPDDector();
             }
             return *dector;
         }

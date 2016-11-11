@@ -16,7 +16,7 @@ namespace rr {
         maxFAR = 0;
         faceDBFile = "../data/FaceDB.txt";
         nonfaceDBFile = "../data/NonfaceDB.txt";
-        outFile = "../result";
+        outFile = "../1226model";
         fddb_dir = "../data/fddb";
         tmpfile = "../data/tmpFaceDB.txt";
         initNeg = "../data/hd.txt";

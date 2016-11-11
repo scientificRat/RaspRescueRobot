@@ -62,8 +62,8 @@ namespace rr{
      
      
     void ImageProcessUnit::processImage(cv::Mat& mImage){
-        rr::NPDDector dector = rr::NPDDector::getInstance();
-        dector.Detect(this->mImage);
+        NPDDector& dector = rr::NPDDector::getInstance();
+        dector.Detect(mImage);
     }
 
      /*
@@ -116,15 +116,15 @@ namespace rr{
         return true;
     }
 
-    void startProcessImage(){
-        this->processCommand = true;
+    void ImageProcessUnit::startProcessImage(){
+         this->processCommand = true;
     }
 
-    void stopProcessImage() {
-        this->processCommand = false;
+    void ImageProcessUnit::stopProcessImage() {
+         this->processCommand = false;
     }
 
-    bool ProcessState() {
-        return this->processCommand;
+    bool ImageProcessUnit::ProcessState() {
+         return this->processCommand;
     }
 }
