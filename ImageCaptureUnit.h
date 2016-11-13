@@ -57,7 +57,7 @@ namespace rr{
              void setImageBrightness(int birhtness);
              
              /*
-             * Get image birhtness
+             * Get image brightness
              */ 
              int getImageBrightness();
              
