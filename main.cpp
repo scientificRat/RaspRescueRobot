@@ -4,7 +4,7 @@
 //
 //  Created by Wang Han on 9/15/16.
 //  Last Modified by Wang Han on 11/2/2016
-//  Copyright (C) 2016 Wang Han. All rights reserved.
+//  Copyright © 2016 Wang Han. All rights reserved.
 //
 
 #include <iostream>

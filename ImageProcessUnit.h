@@ -2,7 +2,8 @@
 //  rescueRobot
 //
 //  Created by Wang Han.SCU on 25/9/16.
-//  Copyright 漏 2016 rescueRobot. SCU. All rights reserved.
+//  Copyright © 2016 rescueRobot. SCU. All rights reserved.
+
 #ifndef RASPBERRY_ROBOT_IMAGE_PROCESS__
 #define RASPBERRY_ROBOT_IMAGE_PROCESS__
 

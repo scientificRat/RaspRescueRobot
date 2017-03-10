@@ -2,7 +2,7 @@
 //  rescueRobot
 //
 //  Created by Wang Han.SCU on 11/11/16.
-//  Copyright 漏 2016 rescueRobot. SCU. All rights reserved.
+//  Copyright © 2016 rescueRobot. SCU. All rights reserved.
 
 
 #include <math.h>
