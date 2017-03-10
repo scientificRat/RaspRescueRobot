@@ -2,7 +2,7 @@
 //  rescueRobot
 //
 //  Created by Wang Han.SCU on 25/9/16.
-//  Copyright © 2016 robotcloud. SCU. All rights reserved.
+//  Copyright 漏 2016 robotcloud. SCU. All rights reserved.
 
 
 
