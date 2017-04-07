@@ -6,7 +6,7 @@
 
 这是2016年四川大学软件学院省级大创项目。
 
-[基于树莓派和Opencv的搜救机器人介绍视频](http://v.youku.com/v_show/id_XMjYxNjgwNzUzMg==.html?spm=a2hzp.8244740.userfeed.5!2~5~5~5!3~5~A)
+[基于树莓派和Opencv的搜救机器人介绍视频](http://example.com)
 
 
 ## 关于我们
